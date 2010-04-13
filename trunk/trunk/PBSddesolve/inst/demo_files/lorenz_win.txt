@@ -1,0 +1,41 @@
+window title="The Lorenz Equation" onClose=onClose
+
+#-----------------------------------------------------
+grid 1 4 sticky=W
+	label text=View: font=bold
+	button text=Docs func=openFile action=demo_files/lorenz_doc.pdf
+	button text="R Code" func=openFile action=demo/lorenz.r
+	button text=Window func=openFile action=demo_files/lorenz_win.txt
+
+#-----------------------------------------------------
+label text="Solver" font=bold fg="#FF3399" sticky=SW
+grid 1 2
+	radio name=solver text="PBSddesolve" value="PBSddesolve" mode=character sticky=W selected=T
+	radio name=solver text="odesolve" value="odesolve" mode=character sticky=W
+
+#-----------------------------------------------------
+label text="Parameters" font=bold fg="#CC3399" sticky=SW
+vector names="sigma tau rho t0 t1 timestep" \
+       labels="sigma tau rho 'start time' 'stop time' timestep" \
+       values="10 25 2 0 20 0.01" \
+       func=runPlot vert=T
+
+#-----------------------------------------------------
+label text="Initial Values" font=bold fg="#993399" sticky=SW
+vector names="y1 y2 y3" \
+       labels="'initial y1' 'initial y2' 'initial y3'" \
+       values="10 0 10" \
+       func=runPlot vert=T
+
+#-----------------------------------------------------
+label text="Plot Derivatives?" font=bold fg="#6600CC" sticky=SW
+grid 1 3
+	grid 2 1
+		radio name=derivative text="Yes" value="yes" mode=character sticky=W
+		radio name=derivative text="No" value="no" mode=character sticky=W selected=T
+	null padx=15
+	button func=runPlot text="Plot" sticky=SW bg="#99CC33" width=8
+
+#-----------------------------------------------------
+label text="History" font=bold fg="#3300CC" sticky=SW pady=10
+history import="" func=runPlot

@@ -10,6 +10,7 @@
 int the_test_phase=0;
 
 /*===========================================================================*/
+#ifndef lang5
 SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 {
     PROTECT(s);
@@ -17,6 +18,7 @@ SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
     UNPROTECT(1);
     return s;
 }
+#endif
 
 /*===========================================================================*/
 void PBSerror(char *str)

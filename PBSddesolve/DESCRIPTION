@@ -1,6 +1,6 @@
 Package: PBSddesolve
-Version: 1.06
-Date: 2010-04-13
+Version: 1.07
+Date: 2010-04-14
 Title: Solver for Delay Differential Equations
 Author: Alex Couture-Beil <alex_rproject@mofo.ca>, 
   Jon Schnute <Jon.Schnute@dfo-mpo.gc.ca>,
@@ -17,4 +17,5 @@ Description: This package solves systems of delay differential equations.
   That version is no longer supported. The current name emphasizes a close 
   association with other PBS packages, particularly 'PBSmodelling'.
 License: GPL (>= 2)
-Packaged: Fri Sep 19 11:49:53 2008; haighr
+Packaged: 0000-00-00 12:00:00 UTC; this_line_replaced_by_packing_or_building_binary
+

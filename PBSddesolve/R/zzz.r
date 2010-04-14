@@ -1,13 +1,22 @@
-
-.First.lib <- function(lib, pkg)
+.First.lib <- function(lib,pkg)
 {
-	library.dynam("PBSddesolve", pkg, lib)
+	library.dynam("PBSddesolve", pkg, lib);
+	pkg_info <- utils::sessionInfo( package=pkg )$otherPkgs[[ pkg ]]
+	pkg_date <- strsplit( pkg_info$Packaged, " " )[[1]][1]
+
+	userguide_path <- system.file( "doc/PBSddesolve-UG.pdf", package = pkg )
+	
 	cat("
-PBSddesolve 1.06 -- based on solv95 by Simon Wood
+PBSddesolve", pkg_info$Version, "-- Copyright (C) 2007-2010 Fisheries and Oceans Canada
+(based  on solv95 by Simon Wood)
 
-A complete user guide 'PBSddesolve-UG.pdf' appears 
-in the '.../library/PBSddesolve/doc' folder.
+A complete user guide 'PBSddesolve-UG.pdf' is located at 
+", userguide_path, "
 
-Built on Apr 13, 2010
-Pacific Biological Station, Nanaimo\n\n")
+Packaged on", pkg_date, "
+Pacific Biological Station, Nanaimo
+
+
+")
 }
+

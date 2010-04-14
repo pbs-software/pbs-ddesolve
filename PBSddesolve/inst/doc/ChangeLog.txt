@@ -1,73 +1,107 @@
 PBSddesolve Changes
 ===================
-v.1.05  2008-09-19  Rowan
+1.07  2010-04-14  Rowan
+ - Modified zzz.r to generate an automatic message upon loading the package.
+
+1.06  2010-04-13  Jon
+ - Modified C function lang5 by enclosing in '#ifndef lang5 ... #endif' (thanks Martin Maechler, CRAN).
+
+*** Code repository transferred to SVN website http://code.google.com/p/pbs-ddesolve/ ***
+
+1.05  2008-09-19  Rowan
  - Changed package name to 'PBSddesolve' from 'PBSdde' (thanks Andy).
  - Added vignette 'PBSddesolveIntro.Rmw'.
  - Changed 'lorenz' demo pairs to use pch=15, cex=0.2 (works on Windows and Ubuntu UNIX).
-v.1.04  2008-08-01  Rowan
+
+1.04  2008-08-01  Rowan
  - Changed package name to 'PBSdde' from 'ddesolve'.
  - Changed 'lorenz' demo pairs to use pch="." (before: pch=183 does not work on UNIX).
-v.1.03  2008-06-08  Alex
+
+1.03  2008-06-08  Alex
  - Fixed examples to correctly set names.
-v.1.02  2008-04-15  Alex
+
+1.02  2008-04-15  Alex
  - Allow gradient to return a list of length one.
  - Set state variable names so they are available for use in the gradient function.
  - Moved documents to correct vignette locations.
-v.1.01  2007-10-01  Alex
+
+1.01  2007-10-01  Alex
  - Removed c++ style comments to remove warnings for 2.6.0 release.
-v.1.00  2007-07-17  Rowan
+
+1.00  2007-07-17  Rowan
  - Revised Users Guide (also added reference to FishRes in PBSmodelling).
  - Revised examples to deal with slight flaw in PBSmodelling's resetGraph().
  - Created *_doc.pdf files for the examples to replace the *_doc.txt files
      (also altered the win files to get the PDFs).
-v.0.63  2007-07-16  Rowan
+
+0.63  2007-07-16  Rowan
  - Revised examples, Rd file
  - Revised icecream example to show use of the argument "parms".
-v.0.62  2007-07-13  Rowan
+
+0.62  2007-07-13  Rowan
  - Revised examples (blowflies, cooling, icecream).
  - Jon revised Users Guide.
-v.0.61  2007-07-12  Alex
+
+0.61  2007-07-12  Alex
  - Added ability to have parms argument for maps and switches if parms is given to dde.
-v.0.60  2007-06-27  Rowan
+
+0.60  2007-06-27  Rowan
  - Revised Rd file.
  - Revised UG.
-v.0.59  2007-06-10  Rowan
+
+0.59  2007-06-10  Rowan
  - Revised ice cream example and created GUI for it.
-v.0.58  2007-06-10  Alex
+
+0.58  2007-06-10  Alex
  - Changed switch numbering to 1..N range.
-v.0.57  2007-06-04  Alex
+
+0.57  2007-06-04  Alex
  - Added call to grad() from output() to ensure that extra info is accurate
      when interpolating to solve for explicit times.
-v.0.56  2007-05-30  Alex
+
+0.56  2007-05-30  Alex
  - Removed by argument from R and C code.
-v.0.55  2007-05-30  Rowan
+
+0.55  2007-05-30  Rowan
  - Merged ACB's 0.54 dde() wrapper with BJC's desolve() wrapper 
      (only times specified; no 'from,to,by').
-v.0.54  2007-05-29  Alex
+
+0.54  2007-05-29  Alex
  - Fixed bug in dde() where outtimes wasnt passed correctly.
-v.0.53  2007-05-24  Alex
+
+0.53  2007-05-24  Alex
  - Merged in Ben's code.
-v.0.52  2007-05-18  Alex
+
+0.52  2007-05-18  Alex
  - Added switch functionality - still needs documentation.
-v.0.51  2007-05-06  Alex
+
+0.51  2007-05-06  Alex
  - Renamed initstate to ddeinitstate in C code.
-v.0.50  2007-05-05  Alex
+
+0.50  2007-05-05  Alex
  - Released to Cran as version 0.50.
-v.0.07  2007-03-12  Alex
+
+0.07  2007-03-12  Alex
  - Added check for restoring working directories in demos.
-v.0.06  2007-03-11  Alex
+
+0.06  2007-03-11  Alex
  - Removed .rc files.
-v.0.05  2007-03-03  Alex
+
+0.05  2007-03-03  Alex
  - Changed demos.
-v.0.04  2007-02-23  Alex
+
+0.04  2007-02-23  Alex
  - Added error checking to prevent calls to pastvalue(t).
  - Switched order of `t` and `y` expected from user supplied `func`. Now is func(t,y,parms).
  - Created user guide "ddesolve-ug.pdf".
-v.0.03  2007-02-23  Alex
+
+0.03  2007-02-23  Alex
  - Fixed bug where pastvalue() could not be called during `func` test
      it just returns initial values during the `func` test phase.
-v.0.02  2007-02-22  Alex
+
+0.02  2007-02-22  Alex
  - Added pastgradient R wrapper function.
  - Added demos.
-v.0.01  2007-02-18  Alex
+
+0.01  2007-02-18  Alex
  - Created package around Simon Wood's numerical routinues from solv95.

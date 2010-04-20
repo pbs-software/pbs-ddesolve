@@ -10,6 +10,8 @@
 int the_test_phase=0;
 
 /*===========================================================================*/
+/* The function lang5 is part of the C interface for R after version 2.11    */
+/* Thanks to Martin Maechler for pointing this out to us.                    */
 #ifndef lang5
 SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 {

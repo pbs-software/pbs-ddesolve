@@ -425,6 +425,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	setAttrib(list, R_NamesSymbol, names);
 
 	UNPROTECT( 3 );
+  freeglobaldata();
 	return list;
 }
 

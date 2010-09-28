@@ -1,0 +1,48 @@
+\documentclass[letter]{article}
+%\VignetteIndexEntry{Introduction to ddesolve}
+%\VignettePackage{ddesolve}
+
+% For colors
+\usepackage{color}
+\definecolor{red}{rgb}{0.8039216,0.2156863,0}
+\definecolor{green}{rgb}{0, 1, 0}
+\definecolor{blue}{rgb}{0, 0, 1}
+
+% Definitions
+\newcommand{\slan}{{\tt S}}
+\newcommand{\rlan}{{\tt R}}
+\newcommand{\dde}{{\tt ddesolve}}
+\newcommand{\pbsd}{{\tt PBSddesolve}}
+\newcommand{\pbsm}{{\tt PBSmodelling}}
+\newcommand{\tcl}{{\tt Tcl/Tk}}
+\newcommand{\code}[1]{{\tt #1}}
+\newcommand{\ital}[1]{{\it #1}}
+\newcommand{\bold}[1]{{\bf #1}}
+\newcommand{\under}[1]{{\underline {#1}}}
+\newcommand{\red}[1]{{\textcolor{red} {#1}}}
+
+\usepackage{verbatim}
+\usepackage{hyperref}
+
+% Keep on one page
+\topmargin -1.0in \oddsidemargin 0.5in \evensidemargin 0.5in
+\textheight 9.0in \textwidth 5.5in
+
+\begin{document}
+
+\title{Introduction to \dde{}}
+\author{Jon T. Schnute, Alex Couture-Beil, and Rowan Haigh}
+\maketitle
+
+\section{A Brief History of \dde{}}
+
+Originally, \dde{} on CRAN housed code to generate numerical solutions for systems of delay differential equations (DDEs) and ordinary differential equations (ODEs). The numerical routines came from Simon Wood's program \code{solve95}\footnote{URL: \url{http://www.maths.bath.ac.uk/~sw283/simon/dde.html}, file: \code{solv95.zip}}, written in C for the Microsoft Windows operating systems. With \dde{}, a user could write the gradient code for a system of DDEs or ODEs in the R language, rather than C. The code ran on all platforms supported by R, and the results could be inspected using R's extensive graphics capabilities. Simon generously granted us permission to publish \dde{} (including his embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.\\\\
+
+In 2008, we transported the package contents from \dde{} to a new package called \pbsd{}. Simon's embedded C-code has not changed substantially (though we might need to tweak it occasionally). The important point is that any further development or maintenance will be applied to \pbsd{}, not \dde{}. We chose the current name \pbsd{} to emphasize a close association with other PBS (Pacific Biological Station, Nanaimo BC) packages, particularly \pbsm{}.
+
+\vspace*{4ex} \noindent {\bf \Large References}
+
+\vspace*{2ex} \noindent Schnute, J.T., Couture-Beil, A., and Haigh, R. (2008) A user's guide to the R package\\ \code{ddesolve}, version 1.05. 17 pp.\\\\
+Wood, S.N. (1999) \code{Solv95}: a numerical solver for systems of delay differential equations with switches. Saint Andrews, UK. 10 pp.
+
+\end{document}

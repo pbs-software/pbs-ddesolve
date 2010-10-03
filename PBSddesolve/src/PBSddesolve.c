@@ -71,11 +71,10 @@ void output(double *s,double t)
 /*===========================================================================*/
 /* cont is zero for fresh run, and 1 for continuation */
 void numerics(double *c,int cont)
-{ 
-	static double *s;
+{
+	static double *s = NULL;
 	double t0, t1, dt, *otimes; /* bjc 2007-05-08*/
 	int ns, nsw, nhv, nlag, reset=1, fixstep=0, no_otimes; /* bjc 2007-05-08*/
-	static int first=1;
 	long hbsize;
 	ns=data.no_var;
 	nsw=data.nsw;
@@ -91,9 +90,8 @@ void numerics(double *c,int cont)
 	if (cont) {
 		reset=0;
 	} else {
-		if (!first) {
-			free(s);
-			first=0;
+		if (s) {
+			free( s );
   		}
 		s=(double *)calloc(data.no_var,sizeof(double));
 		ddeinitstate(s,c,t0);
@@ -425,7 +423,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	setAttrib(list, R_NamesSymbol, names);
 
 	UNPROTECT( 3 );
-  freeglobaldata();
+	freeglobaldata();
 	return list;
 }
 

@@ -7,7 +7,8 @@
 
 #define CH_BUF_SIZE 128
 
-int the_test_phase=0;
+int the_test_phase = 0;
+int memory_freed = 1; /* when set to 0, freeglobaldata() should be called on re-entering calls to startDDE - only applicable to interupted calculations */
 
 /*===========================================================================*/
 /* The function lang5 is part of the C interface for R after version 2.11    */
@@ -42,19 +43,19 @@ void output(double *s,double t)
 	  and [1..(no_var+1)] are reserved for s[0..no_var] vars
 	  */
 	int i;
-	static double *dummy_var=NULL;
-	if( dummy_var == NULL )
-		dummy_var = malloc( data.no_var*sizeof(double) );
 	data.vals[0][data.vals_ind] = t;
 	for( i = 0; i < data.no_var; i++ )
 		data.vals[i+1][data.vals_ind] = s[i];
 	
 	/*ACB hack - call grad to pull out any other data*/
-	if( data.no_otherVars > 0 )
-		grad(dummy_var,s,NULL,t);
-	
-	for( i = 0; i < data.no_otherVars; i++ )
-		data.vals[1+data.no_var+i][data.vals_ind] = data.tmp_other_vals[i];
+	/* without this call, the other values (returned by grad) won't be calculated exactly at t, but rather at t+/-delta (where delta < step size) which is used during the integration */
+	if( data.no_otherVars > 0 ) {
+		grad(NULL,s,NULL,t);	/* cause a calc exactly at t */
+
+		/* then save the extra variables retuend in the second component of the R grad func */
+		for( i = 0; i < data.no_otherVars; i++ )
+			data.vals[1+data.no_var+i][data.vals_ind] = data.tmp_other_vals[i];
+	}
 	
 	data.vals_ind++;
 	
@@ -303,6 +304,12 @@ int testMapFunc(int no_var, double *test_vars, double t, int switch_num)
 /*===========================================================================*/
 SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit, SEXP parms, SEXP settings, SEXP outtimes)
 {
+	/* free memory on successive calls to startDDE (to prevent leaked memory when R interupts this routine) */
+	if( memory_freed == 0 ) {
+		memory_freed = 1;
+		freeglobaldata();
+	}
+
 	SEXP list, vect, extra_names, yinit_names, names;
 	PROTECT_INDEX extra_names_ipx;
 	double *p, *otimes; /* bjc 2007-05-08*/
@@ -391,6 +398,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	}
 	
 	setupglobaldata(LENGTH(yinit), no_otherVar, no_switch, NUMERIC_POINTER(settings), otimes, no_otimes); /* bjc 2007-05-08*/
+	memory_freed = 0;
 	
 	/* preform dde calculations */
 	numerics(NUMERIC_POINTER(yinit), 0);
@@ -424,6 +432,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 
 	UNPROTECT( 3 );
 	freeglobaldata();
+	memory_freed = 1;
 	return list;
 }
 

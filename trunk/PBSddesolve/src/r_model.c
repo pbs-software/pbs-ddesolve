@@ -147,20 +147,23 @@ double *g,*s,*c,t;
 	
 	/* call R user function */
 	if (r_stuff.useParms)
-    	PROTECT(fcall = lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms));
-    else
-    	PROTECT(fcall = lang3(r_stuff.gradFunc, p1, p2));
-    PROTECT(result = eval(fcall, r_stuff.env));
+		PROTECT(fcall = lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms));
+	else
+		PROTECT(fcall = lang3(r_stuff.gradFunc, p1, p2));
+	PROTECT(result = eval(fcall, r_stuff.env));
     
 	/* copy data from R into `g' */
+    	/* ACB: `g' can be NULL when called by output(); this is only the case when no_var > 0
+	 * this is to compute the other vars at a specific time t (versus t+/-stepsize) */
 	if (r_stuff.gradFuncListReturn) {
 		p1=VECTOR_ELT(result, 0);
-		memcpy(g, NUMERIC_POINTER(p1), data.no_var*sizeof(double));
+		if( g != NULL )
+			memcpy(g, NUMERIC_POINTER(p1), data.no_var*sizeof(double));
 		if (data.no_otherVars>0) {
 			p2=VECTOR_ELT(result, 1);
 			memcpy(data.tmp_other_vals, NUMERIC_POINTER(p2), data.no_otherVars*sizeof(double));
 		}
-	} else {
+	} else if( g != NULL ) {
 		memcpy(g, NUMERIC_POINTER(result), data.no_var*sizeof(double));
 	}
 	UNPROTECT(5);

@@ -71,12 +71,18 @@ void output(double *s,double t)
 
 /*===========================================================================*/
 /* cont is zero for fresh run, and 1 for continuation */
-void numerics(double *c,int cont)
-{
-	static double *s = NULL;
+void numerics(double *c,int cont, int clear)
+{ 
+	static double *s;
 	double t0, t1, dt, *otimes; /* bjc 2007-05-08*/
 	int ns, nsw, nhv, nlag, reset=1, fixstep=0, no_otimes; /* bjc 2007-05-08*/
+	static int first=1;
 	long hbsize;
+
+	if(clear && first==0) { /* Bobby */
+	  free(s); s = NULL; first = 1; return;
+	} else if(clear) return;
+
 	ns=data.no_var;
 	nsw=data.nsw;
 	nhv=data.nhv;
@@ -87,17 +93,19 @@ void numerics(double *c,int cont)
 	hbsize=data.hbsize;
 	otimes=data.otimes;
 	no_otimes=data.no_otimes; /* bjc 2007-05-08*/
-  
+
 	if (cont) {
 		reset=0;
 	} else {
-		if (s) {
-			free( s );
+		if (!first) {
+			free(s);
+			/* first=0; */ /* Bobby */
   		}
 		s=(double *)calloc(data.no_var,sizeof(double));
+		first = 0; /* bobby */
 		ddeinitstate(s,c,t0);
 	}
-	dde(s,c,t0,t1,&dt,data.tol,otimes,no_otimes,ns,nsw,nhv,hbsize,nlag,reset,fixstep); /* bjc 2007-05-08*/
+	dde(s,c,t0,t1,&dt,data.tol,otimes,no_otimes,ns,nsw,nhv,hbsize,nlag,reset,fixstep,0); /* bjc 2007-05-08*/
 	data.dt=dt;
 }
 
@@ -160,6 +168,17 @@ void freeglobaldata()
 		free(data.tmp_other_vals);
 		data.tmp_other_vals=NULL;
 	}
+	/* fprintf(stdout, "freed global data\n"); */
+
+	/* Bobby */
+	/* necessary to free the memory allocated to static pointers
+	   within the following functions */
+	istep(NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,NULL,1);
+	inithisbuff(0, 0, 0, 1);
+	numerics(NULL, 0, 1);
+	dde(NULL,NULL,0,0,NULL,0,NULL,0,0,0,0,0,0,1,0,1);
+	rk23(NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,1);
+	updatehistory(NULL,NULL,NULL,0,1);
 }
 
 int testFunc(int no_var, double *test_vars, double t, SEXP *names, PROTECT_INDEX *names_ipx)
@@ -401,7 +420,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	memory_freed = 0;
 	
 	/* preform dde calculations */
-	numerics(NUMERIC_POINTER(yinit), 0);
+	numerics(NUMERIC_POINTER(yinit), 0, 0);
 	
 	/* create list which will be base of polyset data.frame */
 	PROTECT(list=allocVector(VECSXP, data.no_var+data.no_otherVars+1));

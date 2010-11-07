@@ -48,17 +48,17 @@ void statescale(double *scale);
 /*********************** Integration routines ******************************/
 
 void rk23(double *state,double *newstate,double *g,double *newg,double *error,
-	  double *coeff,int ns,double time,double dt);
-void inithisbuff(int nhv,long histsize,int nlag);
-void updatehistory(double *g,double *s,double *c,double t);
+	  double *coeff,int ns,double time,double dt, int clear);
+void inithisbuff(int nhv,long histsize,int nlag, int clear);
+void updatehistory(double *g,double *s,double *c,double t,int clear);
 double pastvalue(int i,double t,int markno);
 double pastgradient(int i,double t,int markno);
 double zeropos(double x1,double x2,double x3,double s1,double s2,double s3);
 double istep(double *sw0,double *newsws,double *s0,double *news,double *g,
 	     double *newg,double *c,double *err,double t0,double t1,int nsw,
-	     int ns,int *flickedswitch);
+	     int ns,int *flickedswitch, int clear);
 void dde(double *s,double *c,double t0,double t1,double *dt,double eps,
 	 double *otimes, int no_otimes, int ns,int nsw,int nhv,
-	 long hbsize,int nlag,int reset, int fixstep); /* bjc 2007-05-08*/
+	 long hbsize,int nlag,int reset, int fixstep, int clear); /* bjc 2007-05-08*/
 #endif
 #endif

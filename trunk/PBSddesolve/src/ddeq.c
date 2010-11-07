@@ -91,8 +91,9 @@ histype history;
 /***************************************************************************/
 
 
-void rk23(state,newstate,g,newg,error,coeff,ns,time,dt)
+void rk23(state,newstate,g,newg,error,coeff,ns,time,dt,clear)
 	double *state,*newstate,*g,*newg,*error,*coeff,time,dt;int ns;
+	int clear; /* Bobby */
 
 	/* Takes a single integration step from time to time+dt using a 3rd order
 	   embedded Runge-Kutta Fehlberg method:
@@ -119,6 +120,14 @@ be the same pointer/array */
 		      /* c1= 214.0/891.0,   c2= 1.0/33.0,      c3= 650.0/891.0,*/
 		      cc1= 533.0/2106.0, cc3= 800.0/1053.0, cc4=-1.0/78.0;
 	int i;
+       
+	/* Bobby */
+	if(clear && first == 0) {
+		free(k2);free(k3);free(k4);
+		first = 1;
+		return;
+	} else if(clear) return;
+
 	if ((first)||(oldns!=ns))
 	{ if (!first)
 		{ free(k2);free(k3);free(k4);}
@@ -145,8 +154,9 @@ be the same pointer/array */
 }
 
 
-void inithisbuff(nhv,histsize,nlag)
+void inithisbuff(nhv,histsize,nlag,clear)
 	int nhv,nlag;long histsize;
+	int clear; /* Bobby */
 
 	/* sets up the global structure "history" and
 	   sets the global long integer history.offset to zero
@@ -154,12 +164,31 @@ void inithisbuff(nhv,histsize,nlag)
 
 { static int oldnhv=0;
 	int i;
+
+	if(clear && oldnhv) { /* Bobby */
+		for (i=0;i<oldnhv;i++) {
+			free(history.buff[i]);
+			free(history.lagmarker[i]);
+			free(history.gbuff[i]);
+		}
+		if (oldnhv) {
+			free(history.lagmarker);
+			free(history.clock);
+			free(history.buff);
+			free(history.gbuff);
+		}
+		oldnhv = 0;
+		return;
+	}
+	if(clear)
+		return;
+
 	for (i=0;i<oldnhv;i++)
 	{ free(history.buff[i]);
 		free(history.lagmarker[i]);
 		free(history.gbuff[i]);
 	}
-	if (oldnhv) /* then further cleaning is required */
+	if (oldnhv) 
 	{ free(history.lagmarker);
 		free(history.clock);
 		free(history.buff);
@@ -185,8 +214,9 @@ void inithisbuff(nhv,histsize,nlag)
 	history.offset= -1L;
 }
 
-void updatehistory(g,s,c,t)
+void updatehistory(g,s,c,t,clear)
 	double *g,*s,*c,t;
+	int clear;
 
 	/* updates the history record by calling the storehistory() moving the
 	   offset and updating and recording the time 4/10/95*/
@@ -194,6 +224,10 @@ void updatehistory(g,s,c,t)
 { static int first=1, oldhno=-1L;
 	static double *his,*ghis;
 	int i;
+	
+	if(clear && first==0) { free(his); free(ghis); first=1; return; }
+	else if(clear) return;
+
 	if (! history.no) return;
 	if ((first)||(oldhno!=history.no))
 	{ if (!first) { free(his);free(ghis);}
@@ -338,10 +372,9 @@ double zeropos(x1,x2,x3,s1,s2,s3)
 }
 
 
-
-double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
+double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch,clear)
 	double *sw0,*newsws,*s0,*news,*g,*newg,*c,*err,t0,t1;
-	int nsw,ns,*flickedswitch;
+	int nsw,ns,*flickedswitch,clear;
 
 	/* executes RK23 step to next switch or target depending on which comes first
 	   If step is to the first switch then the number of that switch is returned
@@ -356,9 +389,16 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
 	static double *err1,*s1,*s2,*sw1,*sw2;
 	int k,i,switches=0;
 	double zp,dt,sp2,sp1,minp,udge,ds;
+	if(clear && first == 0) { /* Bobby */
+		free(sw1);free(s1);free(sw2);free(s2); free(flicked); free(err1);
+		first = 1;
+		return 0;
+	} else if (clear) return 0;
 	if ((first)||(ns!=nsold)||(nsw!=nswold)) {
 		if (!first) {
 			free(sw1);free(s1);free(sw2);free(s2);
+			/* Bobby */
+			free(flicked); free(err1);
 		}
 		first=0;
 		sw1=(double *)calloc(nsw,sizeof(double));
@@ -370,7 +410,7 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
 		nsold=ns;nswold=nsw;
 	}
 	dt=t1-t0;
-	rk23(s0,news,g,newg,err,c,ns,t0,dt);
+	rk23(s0,news,g,newg,err,c,ns,t0,dt,0);
 	if (nsw) 
 		switchfunctions(newsws,news,c,t1);
 	for (i=0;i<nsw;i++) {                 /* are there any switches */
@@ -389,7 +429,7 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
 	sp1=t0+dt*0.5;
 	for (k=0;k<100;k++) /* if k gets to 100 routine fails */
 	{ 
-		rk23(s0,s1,g,newg,err,c,ns,t0,sp1-t0); /* step to approx. 1st switch position */
+	  rk23(s0,s1,g,newg,err,c,ns,t0,sp1-t0,0); /* step to approx. 1st switch position */
 		switchfunctions(sw1,s1,c,sp1);
 
 		switches=0;
@@ -404,7 +444,7 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
 			return(sp1);
 		}
 
-		rk23(s1,s2,newg,newg,err1,c,ns,sp1,t1-sp1);/* step to end of interval */
+		rk23(s1,s2,newg,newg,err1,c,ns,sp1,t1-sp1,0);/* step to end of interval */
 		switchfunctions(sw2,s2,c,t1);
 
 		for (i=0;i<nsw;i++)     /* are there any switches ? MACRO after debug*/
@@ -450,7 +490,8 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch)
 
 
 
-void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep)  /* bjc 2007-05-08: added otimes*/
+void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep,
+	 clear /* Bobby */)  /* bjc 2007-05-08: added otimes*/
 	double *s,      /* State variables */
 	*c,      /* coefficients */
 	t0,t1,   /* start and stop times */
@@ -472,15 +513,40 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 	reset,      /* set to 0 not to reset, to 1 to reset */
 	nlag,       /* number of place markers per history variable */
 	fixstep;    /* set to 0 for adaptive stepping, or 1 for fixed timestep */
+	int clear;  /* Bobby */
 
 {
-	double D,Da,errmax,rerr,target,t,ti,
-	       *err,*newsws,*sws,*news,*newg,*dum,*sp,*nswp,*swp,*nsp,*e0,*scale;
+  double D,Da,errmax,rerr,target,t,ti;
+  static double *err,*newsws,*sws,*news,*newg,*dum,*sp,*nswp,*swp,*nsp,*e0,*scale;
 	static double *g,mindt,maxdt;
 	static double tout, oldt, *sout, *olds, *oldg; /* bjc 2007-05-08*/
 	static int first=1;
 	long i,iout=1L;
 	int swi;
+
+	if(clear && first == 0) { /* Bobby */
+		free(g); first = 1; 
+	} 
+
+	/* clear if allocated when interrupted */
+	/* Bobby: not sure how it is getting interrupted but it is */
+	if(clear) { /* Bobby */
+		if(swp) { free(swp); swp = NULL; }
+		if(nswp) { free(nswp); nswp = NULL; }
+		if(nsp) { free(nsp); nsp = NULL; }
+		if(err) { free(err); err = NULL; }
+		if(e0) { free(e0); e0 = NULL; }
+		if(newg) { free(newg); newg = NULL; }
+		if(scale) { free(scale); scale = NULL; }
+		if(olds) { free(olds); olds = NULL; }
+		if(oldg) { free(oldg); oldg = NULL; }
+		if(sout) { free(sout); sout = NULL; }
+		return;
+	}
+
+	swp = nswp = nsp = err = e0 = newg = scale = NULL; /* Bobby */
+	sout = olds = oldg = NULL; /* Bobby */
+
 	nswp=newsws=(double *)calloc(nsw,sizeof(double));
 	swp=sws=(double *)calloc(nsw,sizeof(double));
 	nsp=news=(double *)calloc(ns,sizeof(double));
@@ -501,9 +567,9 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 		maxdt=(*dt)*100.0;
 		g=(double *)calloc(ns,sizeof(double));
 		sout=(double *)calloc(ns, sizeof(double)); /* bjc 2007-05-08*/
-		inithisbuff(nhv,hbsize,nlag);
+		inithisbuff(nhv,hbsize,nlag,0);
 		grad(g,s,c,t0);
-		updatehistory(g,s,c,t0);
+		updatehistory(g,s,c,t0,0);
 	}
 
 	ti=t=t0;
@@ -526,7 +592,7 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 			olds[i]=s[i];
 		}
 		oldt=t; 
-		t=istep(sws,newsws,s,news,g,newg,c,err,t0,target,nsw,ns,&swi);
+		t=istep(sws,newsws,s,news,g,newg,c,err,t0,target,nsw,ns,&swi,0);
 		errmax=0.0;
 		if ((!fixstep)&&(D>mindt)) { /* error control: see Press et al. 1992 p718*/
 			for (i=0;i<ns;i++) /*e0[i]=eps*(fabs(s[i])+fabs((t-t0)*g[i])+1e-20);*/
@@ -544,7 +610,7 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 			/*printf("\nt = %g    dt = %g",t,*dt);*/
 			dum=s;s=news;news=dum;dum=sws;sws=newsws;newsws=dum;
 			dum=g;g=newg;newg=dum;
-			updatehistory(g,s,c,t);
+			updatehistory(g,s,c,t,0);
 			/* bjc 2007-05-08: new fancy outputting */
 			/* Interpolate using HERMITE between current and last accepted points */
 			while( (t>=tout) && (iout<=no_otimes) ) { /* outputting results */
@@ -562,7 +628,7 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 				map(s,c,t,swi);
 				output(s,t);
 				/* printf("\nStep at t=%g\n",t); */
-				grad(g,s,c,t);updatehistory(g,s,c,t);
+				grad(g,s,c,t);updatehistory(g,s,c,t,0);
 			} else {
 				/* increase stepsize */
 				if ((!fixstep)&&(t<t1))
@@ -587,7 +653,9 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 	/* if (dout && (otimes[no_otimes-1]==t1)) output(s,t1); */
 	for (i=0;i<ns;i++) sp[i]=s[i]; /* copying results to correct address */
 	free(swp);free(nswp);free(nsp);free(err);free(e0);free(newg);free(scale);
+	swp = nswp = nsp = err = e0 = newg = scale = NULL; /* Bobby */
 	free(sout); free(olds); free(oldg); /* bjc 2007-05-08*/
+	sout = olds = oldg = NULL; /* Bobby */
 }
 
 

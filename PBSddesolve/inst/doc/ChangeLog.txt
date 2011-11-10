@@ -1,5 +1,20 @@
 PBSddesolve Changes
 ===================
+1.09  2010-11-10  Rowan
+  - R-2.14.0 requires namespace and loading via '.onLoad'. (RH 11/10)
+
+1.08  2010-11-07  Alex
+  - Merged in Bobby's memory clean up modifications. (ACB 11/7)
+  - Added check to delete global memory when startDDE is interrupted by the user,
+	memory is only cleared on subsequent calls to startDDE (or clean exits). (ACB 11/4)
+  - Removed dummy_var nonsense, and refactored to simply pass a NULL rather than have a static pointer malloced 
+	(which caused a potential buffer overflow on subsequent calls with larger number of variables to solve). (ACB 11/4)
+  - Fixed memory leak; fixes Issue 3. (ACB 10/3)
+  - Moved old ddesolve to branches. (ACB 9/27)
+  - Added 'freeglobaldata()' to PBSddesolve.c to fix memory leak. (ACB 8/27)
+  - Included the short deprecated version of ddesolve. (ACB 6/23)
+  - Added a minor comment to PBSddesolve.c. Changed version to 1.08. (ACB 4/20)
+
 1.07  2010-04-14  Rowan
  - Modified zzz.r to generate an automatic message upon loading the package.
 

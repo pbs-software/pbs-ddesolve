@@ -1,12 +1,12 @@
 Package: PBSddesolve
 Version: 1.09
-Date: 2011-11-10
+Date: 2012-11-01
 Title: Solver for Delay Differential Equations
 Author: Alex Couture-Beil <alex_rproject@mofo.ca>, 
-  Jon Schnute <Jon.Schnute@dfo-mpo.gc.ca>,
+  Jon Schnute <schnutej-dfo@shaw.ca>,
   Rowan Haigh <Rowan.Haigh@dfo-mpo.gc.ca>
-Maintainer: Jon Schnute <Jon.Schnute@dfo-mpo.gc.ca>
-Depends: R (>= 2.6.0)
+Maintainer: Jon Schnute <schnutej-dfo@shaw.ca>
+Depends: R (>= 2.15.0)
 Description: This package solves systems of delay differential equations. 
   by interfacing numerical routines written by Simon N. Wood 
   <s.wood _at_ bath.ac.uk>, with contributions by Benjamin J. Cairns 
@@ -17,5 +17,4 @@ Description: This package solves systems of delay differential equations.
   That version is no longer supported. The current name emphasizes a close 
   association with other PBS packages, particularly 'PBSmodelling'.
 License: GPL (>= 2)
-Packaged: 0000-00-00 12:00:00 UTC; this_line_replaced_by_packing_or_building_binary
 

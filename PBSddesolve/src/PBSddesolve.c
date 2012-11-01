@@ -27,7 +27,8 @@ SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 void PBSerror(char *str)
 {
 	error(str);
-	exit(-1);
+	/* exit(-1); */
+	return(-1);
 }
 
 /*===========================================================================*/

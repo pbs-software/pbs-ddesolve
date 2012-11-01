@@ -1,8 +1,7 @@
 # Export all names from PBSddesolve
-exportPattern(".")
+
+exportPattern("^[^\\.]")
 
 # Import all packages listed as Imports or Depends
-#import(
-#  PBSmodelling
-#)
+#import( PBSmodelling )
 

@@ -43,7 +43,6 @@ void grad(double *g,double *s,double *c,double t);
 void storehistory(double *his,double *ghis,double *g,double *s,double *c,double t);
 void ddeinitstate(double *s,double *c,double t);
 void output(double *s,double t);
-void PBSerror(char *str);
 void statescale(double *scale);
 /*********************** Integration routines ******************************/
 

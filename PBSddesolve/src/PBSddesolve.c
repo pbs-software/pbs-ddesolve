@@ -24,20 +24,6 @@ SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 #endif
 
 /*===========================================================================*/
-void PBSerror(char *str)
-{
-	error(str);
-	/* exit(-1); */
-	return(-1);
-}
-
-/*===========================================================================*/
-void info(char *str)
-{
-	warning(str);
-}
-
-/*===========================================================================*/
 void output(double *s,double t)
 {
 	/*data.vals[0] is for t,

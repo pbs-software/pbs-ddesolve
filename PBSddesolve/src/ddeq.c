@@ -209,7 +209,7 @@ void inithisbuff(nhv,histsize,nlag,clear)
 	for (i=0;i<nhv;i++)
 		history.gbuff[i]=(double *)calloc((size_t)history.size,sizeof(double));
 	if (!history.gbuff[nhv-1])
-	{ PBSerror("History buffer too long");
+	{ error("History buffer too long");
 	}
 	history.offset= -1L;
 }
@@ -276,7 +276,7 @@ double pastgradient(i,t,markno)
 	k1=k+1L;if (k1==size) k1=0L;
 	if (t<x[k]) {
 		Rprintf("\nERROR: lag for variable %d too large at %g\n",i,history.last_time-t);
-		PBSerror("lag too large for history buffer - try increasing the value of ‘hbsize’");
+		error("Lag too large for history buffer - try increasing the value of 'hbsize'");
 	}
 	x0=x[k];x1=x[k1];
 #ifdef SWITCHES  /* some code for not extrapolating through a switch */
@@ -315,7 +315,7 @@ double pastvalue(i,t,markno)
 	{
 		Rprintf("\nERROR: lag for variable %d too large at %g\nx[k]=%g   k=%d   t=%g\n",i,
 				history.last_time-t,x[k],k,t);
-		PBSerror("lag too large for history buffer - try increasing the value of ‘hbsize’");
+		error("Lag too large for history buffer - try increasing the value of 'hbsize'");
 	}
 	x0=x[k];x1=x[k1];
 #ifdef SWITCHES  /* some code for not extrapolating through a switch */
@@ -347,7 +347,7 @@ double zeropos(x1,x2,x3,s1,s2,s3)
 		udge=1.00000001;
 	}
 	z=x3-x2;y=x2-x1;zpy=z+y;
-	if (z==0.0||y==0.0) PBSerror("Error in switching: zero switch interval");
+	if (z==0.0||y==0.0) error("Error in switching: zero switch interval");
 	a1=a=s2;c1=c=(z*s1+y*s3-zpy*s2)/(zpy*z*y);b1=b=(s2-s1)/y+c*y;
 	d=b*b-4.0*a*c;c*=2.0;
 	p= -a/b; /* linear only approximation - in case c numerically zero */
@@ -483,7 +483,7 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch,clear)
 				sp1+=udge*ds;udge*=10.0;
 			} while (sp1==minp);
 	}
-	PBSerror("Problem with switch logic");return(t0);
+	error("Problem with switch logic");return(t0);
 
 }
 

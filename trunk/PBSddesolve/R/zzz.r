@@ -1,6 +1,11 @@
 .onLoad <- function(lib,pkg)
 {
-	library.dynam("PBSddesolve", pkg, lib);
+	library.dynam("PBSddesolve", pkg, lib)
+}
+
+.onAttach <- function(lib, pkg)
+{
+        # obtain values necessary for the welcome message
 	pkg_info <- utils::sessionInfo( package="PBSddesolve" )$otherPkgs$PBSddesolve
 	if( is.character( pkg_info$Packaged ) )
 		pkg_date <- strsplit( pkg_info$Packaged, " " )[[1]][1]
@@ -26,4 +31,3 @@ http://code.google.com/p/pbs-software/
 
 ")
 }
-

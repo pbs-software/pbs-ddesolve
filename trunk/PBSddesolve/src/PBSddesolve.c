@@ -310,25 +310,25 @@ int testMapFunc(int no_var, double *test_vars, double t, int switch_num)
 /*===========================================================================*/
 SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit, SEXP parms, SEXP settings, SEXP outtimes)
 {
-	/* free memory on successive calls to startDDE (to prevent leaked memory when R interupts this routine) */
-	if( memory_freed == 0 ) {
-		memory_freed = 1;
-		freeglobaldata();
-	}
-
 	SEXP list, vect, extra_names, yinit_names, names;
 	PROTECT_INDEX extra_names_ipx;
 	double *p, *otimes; /* bjc 2007-05-08*/
 	int i,j, no_var, no_otherVar, no_switch, no_otimes; /* bjc 2007-05-08*/
 	char ch_buf[CH_BUF_SIZE];
+
+	/* free memory on successive calls to startDDE (to prevent leaked memory when R interupts this routine) */
+	if( memory_freed == 0 ) {
+		memory_freed = 1;
+		freeglobaldata();
+	}
 	
 	/* save R global data for later */
-	if(!isFunction(gradFunc)) error("‘gradFunc’ must be a function");
+	if(!isFunction(gradFunc)) error("\"gradFunc\" must be a function");
 	/*TODO check switchFunc is a func, or mark as missing or null*/
-	if(!isEnvironment(env)) error("‘env’ should be an environment");
-	if(!isNumeric(yinit)) error("‘yinit’ should be a numeric vector");
-	if(!isNumeric(settings)) error("‘settings’ should be a numeric vector");
-	if(!isNumeric(outtimes) && !isNull(outtimes)) error("‘times’ should be a numeric vector or NULL"); /* bjc 2007-05-08: check times vector*/
+	if(!isEnvironment(env)) error("\"env\" should be an environment");
+	if(!isNumeric(yinit)) error("\"yinit\" should be a numeric vector");
+	if(!isNumeric(settings)) error("\"settings\" should be a numeric vector");
+	if(!isNumeric(outtimes) && !isNull(outtimes)) error("\"times\" should be a numeric vector or NULL"); /* bjc 2007-05-08: check times vector*/
 
 	r_stuff.env = env;
 	r_stuff.gradFunc = gradFunc;
@@ -345,7 +345,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 		i++;
 		list = CDR(list);
 	}
-	if (i!=2 && i!=3) error("‘gradFunc’ must be in the form func(y,t) or func(y,t,parms)");
+	if (i!=2 && i!=3) error("\"gradFunc\" must be in the form func(y,t) or func(y,t,parms)");
 	r_stuff.useParms = (i==3); /* only use parms if 3 arguments */
 	
 	no_var = LENGTH(yinit);
@@ -454,8 +454,8 @@ SEXP getPastValue(SEXP t, SEXP markno)
 		return r_stuff.yinit;
 	
 	if (data.vals==NULL) error("pastvalue can only be called from `func` when triggered by dde solver.");
-	if (!isNumeric(t)) error("‘t’ should be numeric");
-	if (!isInteger(markno)) error("‘markno’ must be an integer");
+	if (!isNumeric(t)) error("\"t\" should be numeric");
+	if (!isInteger(markno)) error("\"markno\" must be an integer");
 	if (data.hbsize<=0) error("no history buffer was created. dde(...) "
 	                          "should be called with hbsize>0");
 	if (INTEGER_POINTER(markno)[0] >= data.nlag || INTEGER_POINTER(markno)[0] < 0) 
@@ -488,8 +488,8 @@ SEXP getPastGradient(SEXP t, SEXP markno)
 		return r_stuff.yinit;
 
 	if (data.vals==NULL) error("pastgradient can only be called from `func` when triggered by dde solver.");
-	if (!isNumeric(t)) error("‘t’ should be numeric");
-	if (!isInteger(markno)) error("‘markno’ must be an integer");
+	if (!isNumeric(t)) error("\"t\" should be numeric");
+	if (!isInteger(markno)) error("\"markno\" must be an integer");
 	if (data.hbsize<=0) error("no history buffer was created. dde(...) "
 	                          "should be called with hbsize>0");
 	if (INTEGER_POINTER(markno)[0] >= data.nlag || INTEGER_POINTER(markno)[0] < 0) 

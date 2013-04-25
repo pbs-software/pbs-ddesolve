@@ -516,13 +516,13 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 	int clear;  /* Bobby */
 
 {
-  double D,Da,errmax,rerr,target,t;
+  double D,Da,errmax,rerr,target,t=0;
   static double *err,*newsws,*sws,*news,*newg,*dum,*sp,*nswp,*swp,*nsp,*e0,*scale;
 	static double *g,mindt,maxdt;
 	static double tout, oldt, *sout, *olds, *oldg; /* bjc 2007-05-08*/
 	static int first=1;
 	long i,iout=1L;
-	int swi;
+	int swi=0;
 
 	if(clear && first == 0) { /* Bobby */
 		free(g); first = 1; 

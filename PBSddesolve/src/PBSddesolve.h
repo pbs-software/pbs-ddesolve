@@ -34,7 +34,7 @@ typedef struct {
 } globalRdatatype;
 
 
-globaldatatype data;
+globaldatatype global_data;
 globalRdatatype r_stuff;
 
 SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w);

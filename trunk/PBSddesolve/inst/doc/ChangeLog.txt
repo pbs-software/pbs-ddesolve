@@ -3,9 +3,18 @@ PBSddesolve Changes
 Authors:  ACB = Alex Couture-Beil
           JTS = Jon T. Schnute
           RH  = Rowan Haigh
+          NB  = Nicholas Boers
 -----------------------------------
 
-1.09  2012-11-01  Rowan
+1.10  2013-04-25
+  - Moved `PBSddesolveIntro.Rnw` to `vignettes` directory. (RH 4/25)
+  - Advanced version for resubmission to CRAN and to avoid some nonsense message during Rcheck:
+	`Version contains leading zeroes (1.09)` (RH 4/25)
+
+1.09  2013-04-25
+  - Fixed compilation issue on Windows along with two compiler warnings. (NB 4/25)
+  - Moved banner message to `.onAttach` and fixed warnings. (NB 3/23)
+  - Removed `info` (unused) and `PBSerror`, and added calls to `error`. (NB 12/5)
   - Changed an 'exit' to a 'return' in 'PBSddesolve.c'. (RH 11/01)
   - Jon changed email address to schnutej-dfo@shaw.ca (RH 10/31)
   - R-2.14.0 requires namespace and loading via '.onLoad'. (RH 11/10)

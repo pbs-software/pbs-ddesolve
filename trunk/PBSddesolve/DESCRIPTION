@@ -1,15 +1,16 @@
 Package: PBSddesolve
-Version: 1.09
-Date: 2012-11-01
-Title: Solver for Delay Differential Equations
-Author: Alex Couture-Beil <alex_rproject@mofo.ca>, 
-  Jon Schnute <schnutej-dfo@shaw.ca>,
-  Rowan Haigh <Rowan.Haigh@dfo-mpo.gc.ca>
+Version: 1.10
+Date:    2013-04-25
+Title:   Solver for Delay Differential Equations
+Author:  Alex Couture-Beil <alex@mofo.ca>, 
+         Jon Schnute <schnutej-dfo@shaw.ca>,
+         Rowan Haigh <rowan.haigh@dfo-mpo.gc.ca>,
+         Nicholas Boers <boersn@macewan.ca>
 Maintainer: Jon Schnute <schnutej-dfo@shaw.ca>
 Depends: R (>= 2.15.0)
 Description: This package solves systems of delay differential equations. 
   by interfacing numerical routines written by Simon N. Wood 
-  <s.wood _at_ bath.ac.uk>, with contributions by Benjamin J. Cairns 
+  <s.wood@bath.ac.uk>, with contributions by Benjamin J. Cairns 
   <ben.cairns@bristol.ac.uk>. These numerical routines first appeared 
   in Simon Wood's solv95 program.
   This package includes a vignette and a complete user's guide. 

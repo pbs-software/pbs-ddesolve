@@ -38,8 +38,8 @@ double *sw,*s,*c,t;
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
 
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(data.no_var));
-	memcpy(NUMERIC_POINTER(p2), s, data.no_var*sizeof(double));
+	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
 	
 	/* call R user function */
 	if (r_stuff.useParms)
@@ -50,7 +50,7 @@ double *sw,*s,*c,t;
     PROTECT(result = eval(fcall, r_stuff.env));
     
 	/* copy data from R into `sw' */
-	memcpy(sw, NUMERIC_POINTER(result), data.nsw*sizeof(double));
+	memcpy(sw, NUMERIC_POINTER(result), global_data.nsw*sizeof(double));
 
 	UNPROTECT(4);
 }
@@ -79,8 +79,8 @@ double *s,*c,t;int swno;
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
     
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(data.no_var));
-	memcpy(NUMERIC_POINTER(p2), s, data.no_var*sizeof(double));
+	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
 
 	/* argument 3 `switchnum' */
 	PROTECT(p3=NEW_NUMERIC(1));
@@ -94,7 +94,7 @@ double *s,*c,t;int swno;
     PROTECT(result = eval(fcall, r_stuff.env));
     
 	/* copy returned data from R into `s' */
-	memcpy(s, NUMERIC_POINTER(result), data.no_var*sizeof(double));
+	memcpy(s, NUMERIC_POINTER(result), global_data.no_var*sizeof(double));
 	
 	UNPROTECT(5);
 }
@@ -124,22 +124,22 @@ double *g,*s,*c,t;
 	int i;
 	
 	/* store current t, to prevent calls to pastvalue(t) */
-	data.current_t = t;
+	global_data.current_t = t;
 	
 	/* argument 1 `t' */
 	PROTECT(p1=NEW_NUMERIC(1));
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
 
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(data.no_var));
-	memcpy(NUMERIC_POINTER(p2), s, data.no_var*sizeof(double));
+	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
 
 	/* Create the names vector. TODO: do this only once, and not in this function.
 	Perhaps the testFunc section would be more appropriate */	
 	yinit_names = GET_NAMES(r_stuff.yinit);
-	PROTECT(names = allocVector(STRSXP, data.no_var));
+	PROTECT(names = allocVector(STRSXP, global_data.no_var));
 	if( isNull(yinit_names) == 0 ) {
-		for( i = 0; i < data.no_var; i++ ) {
+		for( i = 0; i < global_data.no_var; i++ ) {
 			SET_STRING_ELT(names, i, STRING_ELT(yinit_names, i));
 		}
 		setAttrib(p2, R_NamesSymbol, names);
@@ -158,13 +158,13 @@ double *g,*s,*c,t;
 	if (r_stuff.gradFuncListReturn) {
 		p1=VECTOR_ELT(result, 0);
 		if( g != NULL )
-			memcpy(g, NUMERIC_POINTER(p1), data.no_var*sizeof(double));
-		if (data.no_otherVars>0) {
+			memcpy(g, NUMERIC_POINTER(p1), global_data.no_var*sizeof(double));
+		if (global_data.no_otherVars>0) {
 			p2=VECTOR_ELT(result, 1);
-			memcpy(data.tmp_other_vals, NUMERIC_POINTER(p2), data.no_otherVars*sizeof(double));
+			memcpy(global_data.tmp_other_vals, NUMERIC_POINTER(p2), global_data.no_otherVars*sizeof(double));
 		}
 	} else if( g != NULL ) {
-		memcpy(g, NUMERIC_POINTER(result), data.no_var*sizeof(double));
+		memcpy(g, NUMERIC_POINTER(result), global_data.no_var*sizeof(double));
 	}
 	UNPROTECT(5);
 }
@@ -181,7 +181,7 @@ double *his,*ghis,*g,*s,*c,t;
 
 {
 	int i;
-	for(i=0;i<data.no_var;i++) {
+	for(i=0;i<global_data.no_var;i++) {
 		his[i]=s[i];
 		ghis[i]=g[i];
 	}
@@ -205,7 +205,7 @@ void ddeinitstate(double *s, double *c, double t)
 /* initialise state variables and any global constants here, you can use c */
 {
 	int i;
-	for(i=0;i<data.no_var;i++)
+	for(i=0;i<global_data.no_var;i++)
 		s[i]=c[i];
 }
 

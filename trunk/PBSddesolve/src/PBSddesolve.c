@@ -26,33 +26,33 @@ SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 /*===========================================================================*/
 void output(double *s,double t)
 {
-	/*data.vals[0] is for t,
+	/*global_data.vals[0] is for t,
 	  and [1..(no_var+1)] are reserved for s[0..no_var] vars
 	  */
 	int i;
-	data.vals[0][data.vals_ind] = t;
-	for( i = 0; i < data.no_var; i++ )
-		data.vals[i+1][data.vals_ind] = s[i];
+	global_data.vals[0][global_data.vals_ind] = t;
+	for( i = 0; i < global_data.no_var; i++ )
+		global_data.vals[i+1][global_data.vals_ind] = s[i];
 	
 	/*ACB hack - call grad to pull out any other data*/
 	/* without this call, the other values (returned by grad) won't be calculated exactly at t, but rather at t+/-delta (where delta < step size) which is used during the integration */
-	if( data.no_otherVars > 0 ) {
+	if( global_data.no_otherVars > 0 ) {
 		grad(NULL,s,NULL,t);	/* cause a calc exactly at t */
 
 		/* then save the extra variables retuend in the second component of the R grad func */
-		for( i = 0; i < data.no_otherVars; i++ )
-			data.vals[1+data.no_var+i][data.vals_ind] = data.tmp_other_vals[i];
+		for( i = 0; i < global_data.no_otherVars; i++ )
+			global_data.vals[1+global_data.no_var+i][global_data.vals_ind] = global_data.tmp_other_vals[i];
 	}
 	
-	data.vals_ind++;
+	global_data.vals_ind++;
 	
-	if (data.vals_ind >= data.vals_size) {
-		for(i=0;i<(1+data.no_var+data.no_otherVars);i++) {
-			data.vals[i] = (double*)realloc(data.vals[i], sizeof(double)*2*data.vals_size);
-			if (data.vals[i]==NULL)
+	if (global_data.vals_ind >= global_data.vals_size) {
+		for(i=0;i<(1+global_data.no_var+global_data.no_otherVars);i++) {
+			global_data.vals[i] = (double*)realloc(global_data.vals[i], sizeof(double)*2*global_data.vals_size);
+			if (global_data.vals[i]==NULL)
 				error("memory (re)allocation failed");
 		}
-		data.vals_size *= 2;
+		global_data.vals_size *= 2;
 	}
 }
 
@@ -70,16 +70,16 @@ void numerics(double *c,int cont, int clear)
 	  free(s); s = NULL; first = 1; return;
 	} else if(clear) return;
 
-	ns=data.no_var;
-	nsw=data.nsw;
-	nhv=data.nhv;
-	nlag=data.nlag;
-	t0=data.t0;
-	t1=data.t1;
-	dt=data.dt;
-	hbsize=data.hbsize;
-	otimes=data.otimes;
-	no_otimes=data.no_otimes; /* bjc 2007-05-08*/
+	ns=global_data.no_var;
+	nsw=global_data.nsw;
+	nhv=global_data.nhv;
+	nlag=global_data.nlag;
+	t0=global_data.t0;
+	t1=global_data.t1;
+	dt=global_data.dt;
+	hbsize=global_data.hbsize;
+	otimes=global_data.otimes;
+	no_otimes=global_data.no_otimes; /* bjc 2007-05-08*/
 
 	if (cont) {
 		reset=0;
@@ -88,12 +88,12 @@ void numerics(double *c,int cont, int clear)
 			free(s);
 			/* first=0; */ /* Bobby */
   		}
-		s=(double *)calloc(data.no_var,sizeof(double));
+		s=(double *)calloc(global_data.no_var,sizeof(double));
 		first = 0; /* bobby */
 		ddeinitstate(s,c,t0);
 	}
-	dde(s,c,t0,t1,&dt,data.tol,otimes,no_otimes,ns,nsw,nhv,hbsize,nlag,reset,fixstep,0); /* bjc 2007-05-08*/
-	data.dt=dt;
+	dde(s,c,t0,t1,&dt,global_data.tol,otimes,no_otimes,ns,nsw,nhv,hbsize,nlag,reset,fixstep,0); /* bjc 2007-05-08*/
+	global_data.dt=dt;
 }
 
 /*===========================================================================*/
@@ -101,42 +101,42 @@ void setupglobaldata(int no_vars, int no_otherVars, int no_switch, double *setti
 { 
 	int i;
 
-	data.tol=settings[0];
-	data.t0=settings[1];        /* start time */
-	data.t1=settings[2];        /* stop time */
+	global_data.tol=settings[0];
+	global_data.t0=settings[1];        /* start time */
+	global_data.t1=settings[2];        /* stop time */
   
-	data.dt=settings[3];        /* initial timestep */
+	global_data.dt=settings[3];        /* initial timestep */
 	
-	data.hbsize=settings[4];    /* how many past values to store for each history variable */
-	data.no_var=no_vars;
+	global_data.hbsize=settings[4];    /* how many past values to store for each history variable */
+	global_data.no_var=no_vars;
   
-	data.no_otherVars=no_otherVars;
+	global_data.no_otherVars=no_otherVars;
 
-	data.nsw=no_switch;          /* number of switch varaibles */  
-	data.nhv=no_vars;         /* Number of history (lagged) variables */
-	data.nlag=1;        /* Number of lag markers per history variable (set to 1 if unsure)*/
+	global_data.nsw=no_switch;          /* number of switch varaibles */  
+	global_data.nhv=no_vars;         /* Number of history (lagged) variables */
+	global_data.nlag=1;        /* Number of lag markers per history variable (set to 1 if unsure)*/
 
 	/* enter out times into the data structure */
-	data.otimes = otimes; /* bjc 2007-05-08: could be NULL*/
-	data.no_otimes = no_otimes; /* bjc 2007-05-08: >= 0  */
+	global_data.otimes = otimes; /* bjc 2007-05-08: could be NULL*/
+	global_data.no_otimes = no_otimes; /* bjc 2007-05-08: >= 0  */
 
-	data.vals_size=1000; /* size will grow, this is just initial min size */
-	data.vals_ind=0;
-	data.vals = (double**)malloc(sizeof(double*)*(data.no_var+no_otherVars+1));
-	if (data.vals==NULL)
+	global_data.vals_size=1000; /* size will grow, this is just initial min size */
+	global_data.vals_ind=0;
+	global_data.vals = (double**)malloc(sizeof(double*)*(global_data.no_var+no_otherVars+1));
+	if (global_data.vals==NULL)
 		error("memory allocation failed");
-	for(i=0;i<(data.no_var+no_otherVars+1);i++) {
-		data.vals[i]=(double*)malloc(sizeof(double)*data.vals_size);
-		if (data.vals[i]==NULL)
+	for(i=0;i<(global_data.no_var+no_otherVars+1);i++) {
+		global_data.vals[i]=(double*)malloc(sizeof(double)*global_data.vals_size);
+		if (global_data.vals[i]==NULL)
 			error("memory allocation failed");
 	}
-	if (data.no_otherVars>0) {
-		data.tmp_other_vals = (double*)malloc(sizeof(double)*data.no_otherVars);
-		if (data.tmp_other_vals==NULL) {
+	if (global_data.no_otherVars>0) {
+		global_data.tmp_other_vals = (double*)malloc(sizeof(double)*global_data.no_otherVars);
+		if (global_data.tmp_other_vals==NULL) {
 			error("memory allocation failed");
 		}
 	} else {
-		data.tmp_other_vals=NULL;
+		global_data.tmp_other_vals=NULL;
 	}
 }
 
@@ -144,16 +144,16 @@ void setupglobaldata(int no_vars, int no_otherVars, int no_switch, double *setti
 void freeglobaldata()
 {
 	int i;
-	if (data.vals) {
-		for(i=0;i<(data.no_var+data.no_otherVars+1);i++) {
-			free(data.vals[i]);
+	if (global_data.vals) {
+		for(i=0;i<(global_data.no_var+global_data.no_otherVars+1);i++) {
+			free(global_data.vals[i]);
 		}
-		free(data.vals);
-		data.vals=NULL;
+		free(global_data.vals);
+		global_data.vals=NULL;
 	}
-	if (data.tmp_other_vals) {
-		free(data.tmp_other_vals);
-		data.tmp_other_vals=NULL;
+	if (global_data.tmp_other_vals) {
+		free(global_data.tmp_other_vals);
+		global_data.tmp_other_vals=NULL;
 	}
 	/* fprintf(stdout, "freed global data\n"); */
 
@@ -409,25 +409,25 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	/* preform dde calculations */
 	numerics(NUMERIC_POINTER(yinit), 0, 0);
 	
-	/* create list which will be base of polyset data.frame */
-	PROTECT(list=allocVector(VECSXP, data.no_var+data.no_otherVars+1));
+	/* create list which will be base of polyset global_data.frame */
+	PROTECT(list=allocVector(VECSXP, global_data.no_var+global_data.no_otherVars+1));
 	
 	/* room for all data (Y) AND time (T) */
-	for(j=0;j<(data.no_var+data.no_otherVars+1);j++) {
+	for(j=0;j<(global_data.no_var+global_data.no_otherVars+1);j++) {
 		/* create numeric vector */
-		PROTECT(vect=NEW_NUMERIC(data.vals_ind));
+		PROTECT(vect=NEW_NUMERIC(global_data.vals_ind));
 
 		/* and fill it up */
 		p=NUMERIC_POINTER(vect);
-		for(i=0;i<data.vals_ind;i++)
-			p[i]=data.vals[j][i];
+		for(i=0;i<global_data.vals_ind;i++)
+			p[i]=global_data.vals[j][i];
 
 		SET_VECTOR_ELT(list, j, vect);
 		UNPROTECT(1);
 	}
 	
 
-	/* Set the names to the data.frame */
+	/* Set the names to the global_data.frame */
 	/* if names are set as realname.y1 - it's because R is stupid and concatenates name history together:
 	wn <- c( a = 1, b = 2 );
 	y1 <- 5 * wn[1]; 	y2 <- wn[2] + wn[1];
@@ -453,21 +453,21 @@ SEXP getPastValue(SEXP t, SEXP markno)
 	if (the_test_phase)
 		return r_stuff.yinit;
 	
-	if (data.vals==NULL) error("pastvalue can only be called from `func` when triggered by dde solver.");
+	if (global_data.vals==NULL) error("pastvalue can only be called from `func` when triggered by dde solver.");
 	if (!isNumeric(t)) error("\"t\" should be numeric");
 	if (!isInteger(markno)) error("\"markno\" must be an integer");
-	if (data.hbsize<=0) error("no history buffer was created. dde(...) "
+	if (global_data.hbsize<=0) error("no history buffer was created. dde(...) "
 	                          "should be called with hbsize>0");
-	if (INTEGER_POINTER(markno)[0] >= data.nlag || INTEGER_POINTER(markno)[0] < 0) 
-		error("markno is out of bounds and should be in 0..data.nlag");
+	if (INTEGER_POINTER(markno)[0] >= global_data.nlag || INTEGER_POINTER(markno)[0] < 0) 
+		error("markno is out of bounds and should be in 0..global_data.nlag");
 	
-	if (NUMERIC_POINTER(t)[0] < data.t0 || NUMERIC_POINTER(t)[0] >= data.current_t) {
-		Rprintf("getvalue error: t=%.5f current integration at t=%.5f\n", NUMERIC_POINTER(t)[0], data.current_t);
+	if (NUMERIC_POINTER(t)[0] < global_data.t0 || NUMERIC_POINTER(t)[0] >= global_data.current_t) {
+		Rprintf("getvalue error: t=%.5f current integration at t=%.5f\n", NUMERIC_POINTER(t)[0], global_data.current_t);
 		error("t is out of bounds and should be >= t0 and < t.\nCalling pastvalue(t) is not allowed.");
 	}
 
-	PROTECT(value=NEW_NUMERIC(data.no_var));
-	for(i=0;i<data.no_var;i++) {
+	PROTECT(value=NEW_NUMERIC(global_data.no_var));
+	for(i=0;i<global_data.no_var;i++) {
 		NUMERIC_POINTER(value)[i] = pastvalue(i,
 		                                      *NUMERIC_POINTER(t),
 		                                      *INTEGER_POINTER(markno));
@@ -487,19 +487,19 @@ SEXP getPastGradient(SEXP t, SEXP markno)
 	if (the_test_phase)
 		return r_stuff.yinit;
 
-	if (data.vals==NULL) error("pastgradient can only be called from `func` when triggered by dde solver.");
+	if (global_data.vals==NULL) error("pastgradient can only be called from `func` when triggered by dde solver.");
 	if (!isNumeric(t)) error("\"t\" should be numeric");
 	if (!isInteger(markno)) error("\"markno\" must be an integer");
-	if (data.hbsize<=0) error("no history buffer was created. dde(...) "
+	if (global_data.hbsize<=0) error("no history buffer was created. dde(...) "
 	                          "should be called with hbsize>0");
-	if (INTEGER_POINTER(markno)[0] >= data.nlag || INTEGER_POINTER(markno)[0] < 0) 
-		error("markno is out of bounds and should be in 0..data.nlag");
+	if (INTEGER_POINTER(markno)[0] >= global_data.nlag || INTEGER_POINTER(markno)[0] < 0) 
+		error("markno is out of bounds and should be in 0..global_data.nlag");
 	
-	if (NUMERIC_POINTER(t)[0] < data.t0 || NUMERIC_POINTER(t)[0] >= data.current_t) 
+	if (NUMERIC_POINTER(t)[0] < global_data.t0 || NUMERIC_POINTER(t)[0] >= global_data.current_t) 
 		error("t is out of bounds and should be >= t0 and < t.\nCalling pastvalue(t) is not allowed.");
 
-	PROTECT(value=NEW_NUMERIC(data.no_var));
-	for(i=0;i<data.no_var;i++) {
+	PROTECT(value=NEW_NUMERIC(global_data.no_var));
+	for(i=0;i<global_data.no_var;i++) {
 		NUMERIC_POINTER(value)[i] = pastgradient(i,
 		                                         *NUMERIC_POINTER(t),
 		                                         *INTEGER_POINTER(markno));

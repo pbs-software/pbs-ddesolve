@@ -1,6 +1,8 @@
 require(PBSddesolve)
 if (!require(PBSmodelling)) stop("The package PBSmodelling must be installed for this demo")
 
+local(env=.PBSddeEnv, expr={
+
 #close any existing windows
 closeWin("window")
 
@@ -23,7 +25,9 @@ myMap <- function(t,y,swID,parms) {
 	if (swID==1) y <- y + Y else y <- (1-f)*y }
 myMapCollect <- function(t,y,swID,parms) {
 	Y <- parms$Y; f <- parms$f;
-	swTimes[[swID]] <<- c( swTimes[[swID]], t ) #collect switch times
+	swTimes = .PBSddeEnv$swTimes
+	swTimes[[swID]] <- c( swTimes[[swID]], t ) #collect switch times
+	assign("swTimes", swTimes, envir=.PBSddeEnv)
 	if (swID==1) y <- y + Y else y <- (1-f)*y }
 
 # the gradient function
@@ -31,7 +35,7 @@ myGrad <- function(t,y,parms) {
 	-parms$r*y }
 
 icePlot <- function() {
-	swTimes <<- list(c(), c());   # store times when map is called
+	assign("swTimes", list(c(), c()),envir=.PBSddeEnv)   # store times when map is called
 	getWinVal(scope="L");
 
 	# calculate actual time offset for deliveries
@@ -68,6 +72,8 @@ icePlot <- function() {
 	points(xsub, ysub, col="red",cex=1.5,pch=16)
 }
 #restore working directory once demo is done
-onClose <- function() { setwd(oldwd); }
+#onClose <- function() { setwd(oldwd); }
+# Now handled by `.onClosePBSddeExamples`
 
 createWin("demo_files/icecream_win.txt")
+})

@@ -6,7 +6,12 @@ Authors:  ACB = Alex Couture-Beil
           NB  = Nicholas Boers
 -----------------------------------
 
-1.10  2013-04-25
+1.10  2013-05-02
+  - Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 5/2)
+  - Introduced new temporary working environment `.PBSddeEnv` in which examples can be run. (RH 5/2)
+  - Fix "start time" bug introduced in r19 ( issue 4 ) (NB 5/2)
+	In r19, a line that initialized t to t0 was cut.  This update restores that line and addresses  issue 4 .
+	This update also renames an identifier so that it now differs from the R "error" function.
   - Moved `PBSddesolveIntro.Rnw` to `vignettes` directory. (RH 4/25)
   - Advanced version for resubmission to CRAN and to avoid some nonsense message during Rcheck:
 	`Version contains leading zeroes (1.09)` (RH 4/25)

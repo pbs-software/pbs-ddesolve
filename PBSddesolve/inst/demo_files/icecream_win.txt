@@ -1,4 +1,4 @@
-window title="Papa Schnutio\'s Gelatteria" onClose=onClose
+window title="Papa Schnutio\'s Gelatteria" onClose=.onClosePBSddeExamples
 
 #-----------------------------------------------------
 grid 1 5 sticky=W

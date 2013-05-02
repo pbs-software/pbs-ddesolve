@@ -1,3 +1,6 @@
+# Taking cue from Roger Bivand's maptools:
+.PBSddeEnv <- new.env(FALSE, parent=globalenv())  # be sure to exportPattern("^\\.PBS") in NAMESPACE
+
 .onLoad <- function(lib,pkg)
 {
 	library.dynam("PBSddesolve", pkg, lib)
@@ -31,3 +34,7 @@ http://code.google.com/p/pbs-software/
 
 ")
 }
+.onUnload <- function(libpath) {
+	rm(.PBSddeEnv)
+}
+

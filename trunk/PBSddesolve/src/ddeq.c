@@ -91,15 +91,15 @@ histype history;
 /***************************************************************************/
 
 
-void rk23(state,newstate,g,newg,error,coeff,ns,time,dt,clear)
-	double *state,*newstate,*g,*newg,*error,*coeff,time,dt;int ns;
+void rk23(state,newstate,g,newg,errors,coeff,ns,time,dt,clear)
+	double *state,*newstate,*g,*newg,*errors,*coeff,time,dt;int ns;
 	int clear; /* Bobby */
 
 	/* Takes a single integration step from time to time+dt using a 3rd order
 	   embedded Runge-Kutta Fehlberg method:
 	   E.Hairer, S.P.Norsett & G.Wanner 1987, Solving Ordinary differential
 	   Equations I. springer-Verlag Berlin. p170 RKF2(3)B
-	   The routine returns an estimated error vector for adaptive timestepping.
+	   The routine returns an estimated errors vector for adaptive timestepping.
 	   The gradient of the state variables is to be given in function grad().
 	   The routine uses the lower order scheme for updating,
 	   fortunately Fehlberg optimised the coefficients for the lower order
@@ -149,7 +149,7 @@ be the same pointer/array */
 	grad(k4,newstate,coeff,time+dt);
 	for (i=0;i<ns;i++)
 	{ newg[i]=k4[i];
-		error[i]=state[i]+(cc1*k1[i]+cc3*k3[i]+cc4*k4[i])*dt-newstate[i];
+		errors[i]=state[i]+(cc1*k1[i]+cc3*k3[i]+cc4*k4[i])*dt-newstate[i];
 	}
 }
 
@@ -572,6 +572,7 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 		updatehistory(g,s,c,t0,0);
 	}
 
+	t=t0;
 	sp=s;
 	D = (*dt);
 	if (otimes[0]==t0) { 

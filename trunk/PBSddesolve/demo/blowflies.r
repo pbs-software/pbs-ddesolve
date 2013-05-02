@@ -1,6 +1,8 @@
 require(PBSddesolve)
 if (!require(PBSmodelling)) stop("The package PBSmodelling must be installed for this demo")
 
+local(env=.PBSddeEnv, expr={
+
 #close any existing windows
 closeWin("window")
 
@@ -37,6 +39,8 @@ runPlot <- function()
 }
 
 #restore working directory once demo is done
-onClose <- function() { setwd(oldwd); }
+#onClose <- function() { setwd(oldwd); }
+# Now handled by `.onClosePBSddeExamples`
 
 createWin("demo_files/blowflies_win.txt")
+})

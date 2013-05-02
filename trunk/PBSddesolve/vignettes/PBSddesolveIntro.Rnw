@@ -4,7 +4,8 @@
 
 % For colors
 \usepackage{color}
-\definecolor{red}{rgb}{0.8039216,0.2156863,0}
+%\definecolor{red}{rgb}{0.8039216,0.2156863,0}
+\definecolor{red}{rgb}{1, 0, 0}
 \definecolor{green}{rgb}{0, 1, 0}
 \definecolor{blue}{rgb}{0, 0, 1}
 
@@ -48,7 +49,7 @@ The R library directory \code{.../PBSddesolve/doc} includes a complete User's Gu
 
 \section{What demos are available?}
 
-\pbsd{} includes four examples that are fully documented in the User's Guide. To view them, run the \pbsm{} function \code{runDemos()}. This produces a GUI that shows all demos available from locally installed packages. Choose \pbsd{}.
+\pbsd{} includes four examples that are fully documented in the User's Guide. To view them, run the \pbsm{} function \code{runDemos()}. This produces a GUI that shows all demos available from locally installed packages. Choose \pbsd{}. Note that the examples are run in the temporary working environment \code{.PBSddeEnv}.
 
 \vspace*{4ex} \noindent {\bf \Large References}
 

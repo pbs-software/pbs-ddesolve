@@ -62,4 +62,7 @@ pastgradient <- function(t)
 	return(out)
 }
 
+.onClosePBSddeExamples = function(){
+	setwd(.PBSddeEnv$oldwd) }
+
 

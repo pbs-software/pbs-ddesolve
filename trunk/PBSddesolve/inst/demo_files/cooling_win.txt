@@ -1,4 +1,4 @@
-window title="Newton\'s Law of Cooling" onClose=onClose
+window title="Newton\'s Law of Cooling" onClose=.onClosePBSddeExamples
 
 #-----------------------------------------------------
 grid 1 4 sticky=W

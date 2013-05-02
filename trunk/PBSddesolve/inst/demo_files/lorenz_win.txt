@@ -1,4 +1,4 @@
-window title="The Lorenz Equation" onClose=onClose
+window title="The Lorenz Equation" onClose=.onClosePBSddeExamples
 
 #-----------------------------------------------------
 grid 1 4 sticky=W

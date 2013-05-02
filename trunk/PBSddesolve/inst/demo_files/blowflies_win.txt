@@ -1,4 +1,4 @@
-window title="Nicholson\'s Blowflies Model" onClose=onClose
+window title="Nicholson\'s Blowflies Model" onClose=.onClosePBSddeExamples
 
 #-----------------------------------------------------
 grid 1 4 sticky=W pady=5

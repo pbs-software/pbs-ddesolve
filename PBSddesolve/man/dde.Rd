@@ -28,8 +28,8 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
    of the DDE system, and \code{parms} is any R object representing 
    additional parameters (optional). 
 
-   The argument \code{func} must return one of the two following return types:
-   1) a vector containing the calculated gradients for each variable; or 
+   The argument \code{func} must return one of the two following return types: \cr
+   1) a vector containing the calculated gradients for each variable; or \cr
    2) a list with two elements - the first a vector of calculated gradients, 
    the second a vector (possibly named) of values for a variable specified by 
    the user at each point in the integration.
@@ -45,7 +45,7 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
    call to \code{mapfunc} is made, which can then modify any state value.
 }
 \item{mapfunc}{if \code{switchfunc} is defined, then a map function must also 
-   be supplied with arguments \cr \code{(t,y,switch_id)} or \code{t,y,switch_id,parms)},
+   be supplied with arguments \code{(t, y, switch_id)} or \code{t, y, switch_id, parms)},
    where \code{t} is the time, \code{y} are the current state values, \code{switch_id} 
    is the index of the triggered switch, and \code{parms} are additional constant parameters.
 }
@@ -53,7 +53,7 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
    the state variable concerned)
 }
 \item{dt}{maximum initial time step}
-\item{hbsize}{history buffer size required for solving DDEs)}
+\item{hbsize}{history buffer size required for solving DDEs}
 }
 
 \details{
@@ -89,31 +89,33 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
 # the demos require the package PBSmodelling
 ##################################################
 
-#create a func to return dde gradient
 require(PBSddesolve)
-yprime <- function(t,y,parms) {
-	if (t < parms$tau)
-		lag <- parms$initial
-	else
-		lag <- pastvalue(t - parms$tau)
-	y1 <- parms$a * y[1] - (y[1]^3/3) + parms$m * (lag[1] - y[1])
-	y2 <- y[1] - y[2]
-	return(c(y1,y2))
+local(env=.PBSddeEnv, expr={
+  #create a func to return dde gradient
+  yprime <- function(t,y,parms) {
+    if (t < parms$tau)
+      lag <- parms$initial
+    else
+      lag <- pastvalue(t - parms$tau)
+    y1 <- parms$a * y[1] - (y[1]^3/3) + parms$m * (lag[1] - y[1])
+    y2 <- y[1] - y[2]
+    return(c(y1,y2))
+  }
+
+  #define initial values and parameters
+  yinit <- c(1,1)
+  parms <- list(tau=3, a=2, m=-10, initial=yinit)
+
+  # solve the dde system
+  yout <- dde(y=yinit,times=seq(0,30,0.1),func=yprime,parms=parms)
+
+  # and display the results
+  plot(yout$t, yout$y1, type="l", col="red", xlab="t", ylab="y", 
+    ylim=c(min(yout$y1, yout$y2), max(yout$y1, yout$y2)))
+  lines(yout$t, yout$y2, col="blue")
+  legend("topleft", legend = c("y1", "y2"),lwd=2, lty = 1, 
+    xjust = 1, yjust = 1, col = c("red","blue"))
+})
 }
-
-#define initial values and parameters
-yinit <- c(1,1)
-parms <- list(tau=3, a=2, m=-10, initial=yinit)
-
-# solve the dde system
-yout <- dde(y=yinit,times=seq(0,30,0.1),func=yprime,parms=parms)
-
-# and display the results
-plot(yout$t, yout$y1, type="l", col="red", xlab="t", ylab="y", 
-     ylim=c(min(yout$y1, yout$y2), max(yout$y1, yout$y2)))
-lines(yout$t, yout$y2, col="blue")
-legend("topleft", legend = c("y1", "y2"),lwd=2, lty = 1, 
-       xjust = 1, yjust = 1, col = c("red","blue"))
-}
-
 \keyword{math}
+

@@ -1,6 +1,6 @@
-'PBSdde' is based on Simon Wood's numerical routinues from solv95.
+'PBSddesolve' is based on Simon Wood's numerical routinues from solv95.
 
 solv95 can be found at http://www.maths.bath.ac.uk/~sw283/simon/dde.html
 
-Simon has generously given us permission to publish 'PBSdde' (including his 
-embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2
+Simon has generously given us permission to publish 'PBSddesolve' (including his 
+embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.

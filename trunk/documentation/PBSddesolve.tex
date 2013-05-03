@@ -1,0 +1,234 @@
+\documentclass[letterpaper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\topmargin -0.25in \oddsidemargin 0in \evensidemargin 0in
+\textheight 9in \textwidth 6.5in
+\begin{document}
+\setcounter{page}{13}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `PBSddesolve'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\item[Version]\AsIs{1.10}
+\item[Date]\AsIs{2013-05-03}
+\item[Title]\AsIs{Solver for Delay Differential Equations}
+\item[Author]\AsIs{Alex Couture-Beil }\email{alex@mofo.ca}\AsIs{,
+Jon T. Schnute }\email{schnutej-dfo@shaw.ca}\AsIs{,
+Rowan Haigh }\email{rowan.haigh@dfo-mpo.gc.ca}\AsIs{,
+Nicholas Boers }\email{boersn@macewan.ca}\AsIs{,
+Simon N. Wood}
+\item[Maintainer]\AsIs{Jon T. Schnute }\email{schnutej-dfo@shaw.ca}\AsIs{}
+\item[Depends]\AsIs{R (>= 2.15.0)}
+\item[Description]\AsIs{This package solves systems of delay differential equations.
+by interfacing numerical routines written by Simon N. Wood , with
+contributions by Benjamin J. Cairns. These numerical routines first
+appeared in Simon Wood's solv95 program.
+This package includes a vignette and a complete user's guide.
+'PBSddesolve' originally appeared on CRAN under the name 'ddesolve'.
+That version is no longer supported. The current name emphasizes a close
+association with other PBS packages, particularly 'PBSmodelling'.}
+\item[License]\AsIs{GPL (>= 2)}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{dde}{Solve Delay Differential Equations}{dde}
+\keyword{math}{dde}
+%
+\begin{Description}\relax
+A solver for systems of delay differential equations based off numerical 
+routines from Simon Wood's \emph{solv95} program. This solver is also 
+capable of solving systems of ordinary differential equations. 
+
+Please see the included demos for examples of how to use \code{dde}.\\{} 
+To view available demos run \code{demo(package="PBSddesolve")}.\\{}
+The supplied demos require that the package \pkg{PBSmodelling} be installed.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL, 
+    tol=1e-08, dt=0.1, hbsize=10000) 
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}] vector of initial values of the DDE system. The size of the supplied vector
+determines the number of variables in the system.
+\item[\code{times}] numeric vector of specific times to solve. 
+\item[\code{func}] a user supplied function that computes the gradients in the DDE 
+system at time \code{t}. The function must be defined using the arguments: 
+\code{(t,y)} or \code{(t,y,parms)}, where \code{t} is the current time
+in the integration, \code{y} is a vector of the current estimated variables 
+of the DDE system, and \code{parms} is any R object representing 
+additional parameters (optional). 
+
+The argument \code{func} must return one of the two following return types: \\{}
+1) a vector containing the calculated gradients for each variable; or \\{}
+2) a list with two elements - the first a vector of calculated gradients, 
+the second a vector (possibly named) of values for a variable specified by 
+the user at each point in the integration.
+
+\item[\code{parms}] any constant parameters to pass to \code{func}, \code{switchfunc}, 
+and \code{mapfunc}.
+
+\item[\code{switchfunc}] an optional function that is used to manipulate state 
+values at given times. The switch function takes the arguments \code{(t,y)} or 
+\code{(t,y,parms)} and must return a numeric vector. The size of the vector 
+determines the number of switches used by the model. As values of 
+\code{switchfunc} pass through zero (from positive to negative), a corresponding 
+call to \code{mapfunc} is made, which can then modify any state value.
+
+\item[\code{mapfunc}] if \code{switchfunc} is defined, then a map function must also 
+be supplied with arguments \code{(t, y, switch\_id)} or \code{t, y, switch\_id, parms)},
+where \code{t} is the time, \code{y} are the current state values, \code{switch\_id} 
+is the index of the triggered switch, and \code{parms} are additional constant parameters.
+
+\item[\code{tol}] maximum error tolerated at each time step (as a proportion of 
+the state variable concerned)
+
+\item[\code{dt}] maximum initial time step
+\item[\code{hbsize}] history buffer size required for solving DDEs
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The user supplied function \code{func} can access past values (lags) of 
+\code{y} by calling the \code{\LinkA{pastvalue}{pastvalue}} function. Past gradients 
+are accessible by the \code{\LinkA{pastgradient}{pastgradient}} function. These functions 
+can only be called from \code{func} and can only be passed values of 
+\code{t} greater or equal to the start time, but less than the current time 
+of the integration point. For example, calling \code{pastvalue(t)} is not 
+allowed, since these values are the current values which are passed in as 
+\code{y}.
+\end{Details}
+%
+\begin{Value}
+A data frame with one column for \code{t}, a column for every variable in the system,
+and a column for every additional value that may (or may not) have been returned
+by \code{func} in the second element of the list.
+
+If the initial \code{y} values parameter was named, then the solved values column 
+will use the same names. Otherwise \code{y1}, \code{y2}, ... will be used.
+
+If \code{func} returned a list, with a named vector as the second element, then
+those names will be used as the column names. If the vector was not named, then
+\code{extra1}, \code{extra2}, ... will be used.
+\end{Value}
+%
+\begin{SeeAlso}\relax
+ \code{\LinkA{pastvalue}{pastvalue}} 
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##################################################
+# This is just a single example of using dde.
+# For more examples see demo(package="PBSddesolve")
+# the demos require the package PBSmodelling
+##################################################
+
+require(PBSddesolve)
+local(env=.PBSddeEnv, expr={
+  #create a func to return dde gradient
+  yprime <- function(t,y,parms) {
+    if (t < parms$tau)
+      lag <- parms$initial
+    else
+      lag <- pastvalue(t - parms$tau)
+    y1 <- parms$a * y[1] - (y[1]^3/3) + parms$m * (lag[1] - y[1])
+    y2 <- y[1] - y[2]
+    return(c(y1,y2))
+  }
+
+  #define initial values and parameters
+  yinit <- c(1,1)
+  parms <- list(tau=3, a=2, m=-10, initial=yinit)
+
+  # solve the dde system
+  yout <- dde(y=yinit,times=seq(0,30,0.1),func=yprime,parms=parms)
+
+  # and display the results
+  plot(yout$t, yout$y1, type="l", col="red", xlab="t", ylab="y", 
+    ylim=c(min(yout$y1, yout$y2), max(yout$y1, yout$y2)))
+  lines(yout$t, yout$y2, col="blue")
+  legend("topleft", legend = c("y1", "y2"),lwd=2, lty = 1, 
+    xjust = 1, yjust = 1, col = c("red","blue"))
+})
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{pastvalue}{Retrieve Past Values (lags) During Gradient Calculation}{pastvalue}
+\aliasA{pastgradient}{pastvalue}{pastgradient}
+\keyword{math}{pastvalue}
+%
+\begin{Description}\relax
+These routines provides access to variable history at lagged times.
+The lagged time \eqn{t}{} must not be less than \eqn{t_0}{}, nor should 
+it be greater than the current time of gradient calculation. The routine 
+cannot be directly called by a user, and will only work during the
+integration process as triggered by the \code{dde} routine.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ 
+pastvalue(t)
+pastgradient(t)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{t}] access history at time \code{t}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+ vector of variable history at time \code{t}. 
+\end{Value}
+%
+\begin{SeeAlso}\relax
+ \code{\LinkA{dde}{dde}} 
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{PBSddesolve}{Package: Solver for Delay Differential Equations}{PBSddesolve}
+\aliasA{PBSddesolve-package}{PBSddesolve}{PBSddesolve.Rdash.package}
+\keyword{package}{PBSddesolve}
+%
+\begin{Description}\relax
+A solver for systems of delay differential equations based off 
+numerical routines from Simon Wood's \code{solv95} program. 
+This solver is also capable of solving systems of ordinary differential equations.
+\end{Description}
+%
+\begin{Details}\relax
+Please see the user guide \code{PBSddesolve-UG.pdf}, located in \code{.../library/PBSddesolve/doc},
+for a comprehensive overview.
+\end{Details}
+%
+\begin{Author}\relax
+Alex Couture-Beil <alex@mofo.ca> \\{}
+Jon T. Schnute <schnutej-dfo@shaw.ca> \\{}
+Rowan Haigh <rowan.haigh@dfo-mpo.gc.ca>
+
+Maintainer: Jon T. Schnute <schnutej-dfo@shaw.ca>
+\end{Author}
+%
+\begin{References}\relax
+Wood, S.N. (1999) Solv95: a numerical solver for systems of delay 
+differential equations with switches. Saint Andrews, UK. 10 pp.
+URL: \url{http://www.maths.bath.ac.uk/~sw283/simon/dde.html}
+\end{References}
+%
+\begin{SeeAlso}\relax
+ \code{\LinkA{dde}{dde}} 
+\end{SeeAlso}
+\printindex{}
+\end{document}

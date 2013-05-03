@@ -16,11 +16,11 @@ Please see the user guide \code{PBSddesolve-UG.pdf}, located in \code{.../librar
 }
 
 \author{
-  Alex Couture-Beil <alex\_rproject@mofo.ca>\cr
-  Jon T. Schnute <Jon.Schnute@dfo-mpo.gc.ca>\cr
-  Rowan Haigh <Rowan.Haigh@dfo-mpo.gc.ca>
+  Alex Couture-Beil <alex@mofo.ca> \cr
+  Jon T. Schnute <schnutej-dfo@shaw.ca> \cr
+  Rowan Haigh <rowan.haigh@dfo-mpo.gc.ca>
 
-Maintainer: Jon Schnute <Jon.Schnute@dfo-mpo.gc.ca>
+Maintainer: Jon T. Schnute <schnutej-dfo@shaw.ca>
 }
 
 \references{

@@ -6,7 +6,8 @@ Authors:  ACB = Alex Couture-Beil
           NB  = Nicholas Boers
 -----------------------------------
 
-1.10  2013-05-02
+1.10  2013-05-03
+  - Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated weblinks. (RH 5/3)
   - Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 5/2)
   - Introduced new temporary working environment `.PBSddeEnv` in which examples can be run. (RH 5/2)
   - Fix "start time" bug introduced in r19 ( issue 4 ) (NB 5/2)

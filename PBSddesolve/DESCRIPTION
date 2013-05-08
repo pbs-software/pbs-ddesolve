@@ -6,7 +6,7 @@ Author:  Alex Couture-Beil <alex@mofo.ca>,
          Jon T. Schnute <schnutej-dfo@shaw.ca>,
          Rowan Haigh <rowan.haigh@dfo-mpo.gc.ca>,
          Nicholas Boers <boersn@macewan.ca>,
-         Simon N. Wood
+         Simon N. Wood, Ben Cairns
 Maintainer: Jon T. Schnute <schnutej-dfo@shaw.ca>
 Depends:    R (>= 2.15.0)
 Description: This package solves systems of delay differential equations. 

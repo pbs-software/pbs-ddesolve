@@ -6,6 +6,10 @@ Authors:  ACB = Alex Couture-Beil
           NB  = Nicholas Boers
 -----------------------------------
 
+1.11  2014-03-27
+  - Jon requested that Rowan becomes the package Maintainer. (RH 3/27)
+  - Bumped up version for next posting to CRAN using builds under R-3.0.3 (RH 3/20)
+
 1.10  2013-05-03
   - Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated weblinks. (RH 5/3)
   - Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 5/2)

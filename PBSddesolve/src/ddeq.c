@@ -519,9 +519,9 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
   double D,Da,errmax,rerr,target,t=0;
   static double *err,*newsws,*sws,*news,*newg,*dum,*sp,*nswp,*swp,*nsp,*e0,*scale;
 	static double *g,mindt,maxdt;
-	static double tout, oldt, *sout, *olds, *oldg; /* bjc 2007-05-08*/
+	static double oldt, *sout, *olds, *oldg; /* bjc 2007-05-08*/
 	static int first=1;
-	long i,iout=1L;
+	long i,iout;
 	int swi=0;
 
 	if(clear && first == 0) { /* Bobby */
@@ -575,11 +575,12 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 	t=t0;
 	sp=s;
 	D = (*dt);
-	if (otimes[0]==t0) { 
-		output(s,t0); 
-		iout++; 
+
+	iout = 0L;
+	if (iout < no_otimes && otimes[iout] == t0) {
+		output(s, otimes[iout++]); 
 	} /* bjc 2007-05-08*/
-	tout = otimes[iout - 1]; /* bjc 2007-05-08*/
+
 	while (t0<t1) {
 		if (t0+D>t1) { 
 			target=t1;
@@ -613,13 +614,11 @@ void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep
 			updatehistory(g,s,c,t,0);
 			/* bjc 2007-05-08: new fancy outputting */
 			/* Interpolate using HERMITE between current and last accepted points */
-			while( (t>=tout) && (iout<=no_otimes) ) { /* outputting results */
+			while( iout < no_otimes && otimes[iout] <= t ) { /* outputting results */
 				for (i=0;i<ns;i++) {
-					HERMITE(sout[i], oldt, t, olds[i], s[i], oldg[i], g[i], tout);
+					HERMITE(sout[i], oldt, t, olds[i], s[i], oldg[i], g[i], otimes[iout]);
 				}
-				output(sout,tout);
-				iout++;
-				tout = otimes[iout - 1]; /* update iout then tout*/
+				output(sout,otimes[iout++]);
 			}
 
 			t0=t;

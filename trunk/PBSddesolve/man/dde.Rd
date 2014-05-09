@@ -110,9 +110,9 @@ local(env=.PBSddeEnv, expr={
   yout <- dde(y=yinit,times=seq(0,30,0.1),func=yprime,parms=parms)
 
   # and display the results
-  plot(yout$t, yout$y1, type="l", col="red", xlab="t", ylab="y", 
+  plot(yout$time, yout$y1, type="l", col="red", xlab="t", ylab="y", 
     ylim=c(min(yout$y1, yout$y2), max(yout$y1, yout$y2)))
-  lines(yout$t, yout$y2, col="blue")
+  lines(yout$time, yout$y2, col="blue")
   legend("topleft", legend = c("y1", "y2"),lwd=2, lty = 1, 
     xjust = 1, yjust = 1, col = c("red","blue"))
 })

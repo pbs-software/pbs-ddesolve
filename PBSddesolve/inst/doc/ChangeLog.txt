@@ -1,12 +1,22 @@
 PBSddesolve Changes
-===================
-Authors:  ACB = Alex Couture-Beil
-          JTS = Jon T. Schnute
-          RH  = Rowan Haigh
-          NB  = Nicholas Boers
------------------------------------
+=========================
+Package authors:
+  ACB = Alex Couture-Beil
+  JTS = Jon T. Schnute
+  RH  = Rowan Haigh
+  NB  = Nicholas Boers
+-------------------------
 
-1.11  2014-03-27
+1.11  2014-05-14
+  - Changed `yout1$t' to `yout1$time' and `yout2$t' to `yout2$time' in `icePlot' to eliminate partial matching warnings. (RH 5/14)
+	Also changed `x$t' to `x$time' in blowflies example `runPlot'; disallowed A0<=0 by setting to GT0(A0) if needed.
+  - Fixed overflow of `otimes' within dde(...). (NB 5/9)
+	valgrind identified an invalid read within dde(...): the array `otimes' was being overflowed by one element. 
+	This commit fixes that overflow and another potential problem that would occur if `otimes' ever had a length of 0, 
+	which is a possibility mentioned in the function startDDE(...) of PBSddesolve.c.
+  - Removed deprecated partial matching in example code. (NB 5/9)
+	The example code used partial matching when accessing the data frame, i.e., yout$t to access "time".
+	This feature has been deprecated and now produces a warning.
   - Jon requested that Rowan becomes the package Maintainer. (RH 3/27)
   - Bumped up version for next posting to CRAN using builds under R-3.0.3 (RH 3/20)
 

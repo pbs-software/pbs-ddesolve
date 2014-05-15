@@ -14,12 +14,12 @@
 		pkg_date <- strsplit( pkg_info$Packaged, " " )[[1]][1]
 	else
 		pkg_date  <- date()
-	
 	userguide_path <- system.file( "doc/PBSddesolve-UG.pdf", package = "PBSddesolve" )
+	year <- substring(date(),nchar(date())-3,nchar(date()))
 	
 	packageStartupMessage("
 -----------------------------------------------------------
-PBSddesolve ", pkg_info$Version, " -- Copyright (C) 2007-2013 Fisheries and Oceans Canada
+PBSddesolve ", pkg_info$Version, " -- Copyright (C) 2007-",year," Fisheries and Oceans Canada
 (based  on solv95 by Simon Wood)
 
 A complete user guide 'PBSddesolve-UG.pdf' is located at 

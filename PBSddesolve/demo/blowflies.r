@@ -12,9 +12,12 @@ if (!exists("oldwd") || getwd() != system.file(package = "PBSddesolve")) {
 	setwd(system.file(package = "PBSddesolve"))
 }
 
+# modified by RH (2014-05-14)
+#  changed x$t to x$time to eliminate partial matching warnings.
 runPlot <- function()
 {
 	getWinVal(scope="L")
+	if (A0 <=0) A0 = GT0(0) # RH: Don't allow user to specify A0<=0 (avoids crash)
 	
 	myGrad <- function(t, y) {
 		if (t-t0 >= tau) ylag <- pastvalue(t-tau)
@@ -29,9 +32,9 @@ runPlot <- function()
 	if (ptype=="t") {
 		frame(); resetGraph();
 		expandGraph(mfrow=c(3,1),mar=c(4,4,2,1),mgp=c(2.75,.75,0),cex.main=1.5,cex.lab=1.5)
-		plot(x=x$t, y=x$y1, type="l", main="Adult Blowfly Population", xlab="Time", ylab="Population (y)")
-		plot(x=x$t, y=x$dy, type="l", main="Rate of Change of Adult Population", xlab="Time", ylab="delta Population (dy)")
-		plot(x=x$t, y=x$yexp, type="l", main="exp(-theta*ylag[1] / A0)", xlab="Time", ylab="exp value")
+		plot(x=x$time, y=x$y1, type="l", main="Adult Blowfly Population", xlab="Time", ylab="Population (y)")
+		plot(x=x$time, y=x$dy, type="l", main="Rate of Change of Adult Population", xlab="Time", ylab="delta Population (dy)")
+		plot(x=x$time, y=x$yexp, type="l", main="exp(-theta*ylag[1] / A0)", xlab="Time", ylab="exp value")
 	}
 	else if (ptype=="p") {
 		frame(); resetGraph();

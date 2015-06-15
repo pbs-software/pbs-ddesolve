@@ -1,0 +1,7 @@
+# PBSddesolve #
+
+The R package **PBSddesolve** generates numerical solutions for systems of delay differential equations (DDEs) and ordinary differential equations (ODEs). The numerical routines come from Simon Wood’s program 'solv95', originally written in C for the Microsoft Windows operating systems. With **PBSddesolve**, a user can write the gradient code for a system of DDEs or ODEs in the R language, rather than C. The code will then run on all platforms supported by R, and the results can be inspected using R’s extensive graphics capabilities. Simon has very generously given us permission to publish **PBSddesolve** (including his embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.
+
+For more information, see the User's Guide (file `PBSddesolve-UG.pdf`) featured on this page. Obtain the package **PBSddesolve** from CRAN (http://cran.r-project.org/), the standard repository for R contributed packages.
+
+This package replaces an earlier R package **ddesolve**, which is no longer supported. For historical purposes, we include an operational vesion (1.02) of **ddesolve** in the list of available downloads. These have been created with R 2.11.1, in part to address [issue #2](https://code.google.com/p/pbs-ddesolve/issues/detail?id=#2).

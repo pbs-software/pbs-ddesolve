@@ -7,6 +7,9 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.0 2015-08-19 (JTS)
+  - First full version number x.y.z
+
 1.11  2015-06-15
   • Last update to Google Code before transferring pbs-ddesolve repository to GitHub. (RH 150615)
   • Changed `yout1$t' to `yout1$time' and `yout2$t' to `yout2$time' in `icePlot' to eliminate partial matching warnings. (RH 140514)

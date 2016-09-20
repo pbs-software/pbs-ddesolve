@@ -10,7 +10,8 @@ test.simple <- function()
 	#test an int
 	yinit <- 1
 	out <- dde( y=yinit, func=grad, times=seq( 0, 1,length=100 ), hbsize=0)
-	checkTrue( all( out$y1 == yinit ) )
+#browser();return()
+	checkTrue( all( out$y1 == yinit ) )  ## weird: often 1==1 is FALSE ???
 	
 	#test a float
 	yinit <- 10.5

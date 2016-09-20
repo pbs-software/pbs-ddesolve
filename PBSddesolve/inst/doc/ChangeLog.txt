@@ -7,6 +7,13 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.2 (2016-09-20)
+  • You need to set the BINPREF variable in etc/.../Makeconf and you can omit the ? (Uwe Ligges 2016-04-18)
+	Old: BINPREF ?= c:/Rtools/mingw_64/bin/
+	New: BINPREF = C:/Apps/R/Rtools/mingw_64/bin/
+  • Fixed bug in `run_tests.r' but tests of `all(out$y1==yinit)' in `test.simple' (runit.dde.r) return FALSE -- problem in `dde'? (RH 160914)
+  • Renamed directory `tests' to `unitTests' (as done by PBSmodelling) to avoid testing by Duncan Murdoch's changes to `R CMD check' and `testInstalledPackage()' (RH 1609014)
+
 1.12.1 (2016-04-18)
   • Updated the User's Guide. (RH 160418)
   • Revised the vignette `PBSddesolveIntro.Rnw' and DESCRIPTION file. (RH 160414).

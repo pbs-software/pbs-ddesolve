@@ -4,7 +4,7 @@ require( "PBSddesolve" )
 require( "RUnit" )
 
 testsuite.dde <- defineTestSuite("dde",
-	dirs = file.path(.path.package(package="PBSddesolve"), "tests"),
+	dirs = file.path(path.package(package="PBSddesolve"), "unitTests"),
 	testFileRegexp = "^runit.+\\.r",
 	testFuncRegexp = "^test.+",
 	rngKind = "Marsaglia-Multicarry",

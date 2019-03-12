@@ -21,6 +21,14 @@ pastgradient(t)
 \value{
   Vector of variable history at time \code{t}.
 }
+\author{
+  Alex Couture-Beil <alex@mofo.ca>
+
+  Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
+  Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
+  \emph{locus opus}: Institute of Ocean Sciences (IOS), Sidney BC\cr
+  Last modified \code{Rd: 2019-03-07}
+}
 \seealso{
   \code{\link[PBSddesolve]{dde}}
 }

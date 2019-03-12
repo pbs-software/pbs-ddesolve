@@ -4,9 +4,11 @@
 
 \description{
   A solver for systems of delay differential equations based on
-  numerical routines from Simon Wood's \emph{solv95} program. This
-  solver is also capable of solving systems of ordinary differential
-  equations. 
+  numerical routines from 
+  \href{https://people.maths.bris.ac.uk/~sw15190/}{Simon Wood}'s
+  \emph{solv95} program.
+  This solver is also capable of solving systems of ordinary
+  differential equations. 
   
   Please see the included demos for examples of how to use \code{dde}.
   
@@ -82,6 +84,14 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
   element, then those names will be used as the column names. If the
   vector was not named, then \code{extra1}, \code{extra2}, ... will be
   used.
+}
+\author{
+  Alex Couture-Beil <alex@mofo.ca>
+
+  Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
+  Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
+  \emph{locus opus}: Institute of Ocean Sciences (IOS), Sidney BC\cr
+  Last modified \code{Rd: 2019-03-07}
 }
 \seealso{
   \code{\link[PBSddesolve]{pastvalue}}

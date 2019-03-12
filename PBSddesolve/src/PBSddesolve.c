@@ -2,8 +2,9 @@
 #include <Rdefines.h>
 
 #include <stdlib.h>
-#include "PBSddesolve.h"
+#include "ddesolve95.h"
 #include "ddeq.h"
+#include "PBSddesolve.h"
 
 #define CH_BUF_SIZE 128
 
@@ -16,10 +17,10 @@ int memory_freed = 1; /* when set to 0, freeglobaldata() should be called on re-
 #ifndef lang5
 SEXP lang5(SEXP s, SEXP t, SEXP u, SEXP v, SEXP w)
 {
-    PROTECT(s);
-    s = LCONS(s, list4(t, u, v, w));
-    UNPROTECT(1);
-    return s;
+	PROTECT(s);
+	s = LCONS(s, list4(t, u, v, w));
+	UNPROTECT(1);
+	return s;
 }
 #endif
 
@@ -37,7 +38,7 @@ void output(double *s,double t)
 	/*ACB hack - call grad to pull out any other data*/
 	/* without this call, the other values (returned by grad) won't be calculated exactly at t, but rather at t+/-delta (where delta < step size) which is used during the integration */
 	if( global_data.no_otherVars > 0 ) {
-		grad(NULL,s,NULL,t);	/* cause a calc exactly at t */
+		grad(NULL,s,NULL,t); /* cause a calc exactly at t */
 
 		/* then save the extra variables retuend in the second component of the R grad func */
 		for( i = 0; i < global_data.no_otherVars; i++ )
@@ -87,7 +88,7 @@ void numerics(double *c,int cont, int clear)
 		if (!first) {
 			free(s);
 			/* first=0; */ /* Bobby */
-  		}
+		}
 		s=(double *)calloc(global_data.no_var,sizeof(double));
 		first = 0; /* bobby */
 		ddeinitstate(s,c,t0);
@@ -98,26 +99,26 @@ void numerics(double *c,int cont, int clear)
 
 /*===========================================================================*/
 void setupglobaldata(int no_vars, int no_otherVars, int no_switch, double *settings, double *otimes, int no_otimes) /* bjc 2007-05-08*/
-{ 
+{
 	int i;
 
 	global_data.tol=settings[0];
-	global_data.t0=settings[1];        /* start time */
-	global_data.t1=settings[2];        /* stop time */
-  
-	global_data.dt=settings[3];        /* initial timestep */
-	
-	global_data.hbsize=settings[4];    /* how many past values to store for each history variable */
+	global_data.t0=settings[1];     /* start time */
+	global_data.t1=settings[2];     /* stop time */
+
+	global_data.dt=settings[3];     /* initial timestep */
+
+	global_data.hbsize=settings[4]; /* how many past values to store for each history variable */
 	global_data.no_var=no_vars;
-  
+
 	global_data.no_otherVars=no_otherVars;
 
-	global_data.nsw=no_switch;          /* number of switch varaibles */  
-	global_data.nhv=no_vars;         /* Number of history (lagged) variables */
-	global_data.nlag=1;        /* Number of lag markers per history variable (set to 1 if unsure)*/
+	global_data.nsw=no_switch;      /* number of switch varaibles */  
+	global_data.nhv=no_vars;        /* Number of history (lagged) variables */
+	global_data.nlag=1;             /* Number of lag markers per history variable (set to 1 if unsure)*/
 
 	/* enter out times into the data structure */
-	global_data.otimes = otimes; /* bjc 2007-05-08: could be NULL*/
+	global_data.otimes = otimes;       /* bjc 2007-05-08: could be NULL*/
 	global_data.no_otimes = no_otimes; /* bjc 2007-05-08: >= 0  */
 
 	global_data.vals_size=1000; /* size will grow, this is just initial min size */
@@ -172,18 +173,18 @@ int testFunc(int no_var, double *test_vars, double t, SEXP *names, PROTECT_INDEX
 {
 	SEXP fcall, p1, p2, result, yinit_names, y_names;
 	int len, i;
-	
+
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
-    
+
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(no_var));
+	p2 = PROTECT(NEW_NUMERIC(no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), test_vars, no_var*sizeof(double));
 
 	/* set state names */
-	yinit_names = GET_NAMES(r_stuff.yinit);
-	PROTECT(y_names = allocVector(STRSXP, no_var));
+	yinit_names = PROTECT(GET_NAMES(r_stuff.yinit)); /* protect 3 */
+	y_names = PROTECT(allocVector(STRSXP, no_var));  /* protect 4 */
 	if( isNull(yinit_names) == 0 ) {
 		for( i = 0; i < no_var; i++ ) {
 			SET_STRING_ELT(y_names, i, STRING_ELT(yinit_names, i));
@@ -193,25 +194,25 @@ int testFunc(int no_var, double *test_vars, double t, SEXP *names, PROTECT_INDEX
 
 	/* call R user function */
 	if (r_stuff.useParms)
-		PROTECT(fcall = lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms));
+		fcall = PROTECT(lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms)); /* protect 5 */
 	else
-    	PROTECT(fcall = lang3(r_stuff.gradFunc, p1, p2));
-    PROTECT(result = eval(fcall, r_stuff.env));
-    
+		fcall = PROTECT(lang3(r_stuff.gradFunc, p1, p2)); /* protect 5 */
+	result = PROTECT(eval(fcall, r_stuff.env));  /* protect 6 */
+
 	if (isReal(result)) {
 		r_stuff.gradFuncListReturn=0;
 		if (LENGTH(result)!=no_var)
 			error("func return error: length of vector (%i) does not match that of initial y values (%i)\n", LENGTH(result), no_var);
-		UNPROTECT(5);
-    	return 0;
-    } else if (isVector(result)) {
+		UNPROTECT(6);
+		return 0;
+	} else if (isVector(result)) {
 		r_stuff.gradFuncListReturn=1;
 	} else {
 		error("func return error: should return numeric vector or list. (got type \"%i\")\n", TYPEOF(result));
 	}
-	
+
 	p1 = VECTOR_ELT(result, 0);
-	
+
 	if (LENGTH(result)!=2 && LENGTH(result)!=1)
 		error("func return error: returned list should have length one or two\n", TYPEOF(p1));
 	if (!isReal(p1))
@@ -234,7 +235,7 @@ int testFunc(int no_var, double *test_vars, double t, SEXP *names, PROTECT_INDEX
 			REPROTECT((*names) = GET_NAMES(p2), *names_ipx);
 		}
 	}
-	UNPROTECT(5);
+	UNPROTECT(6);
 	return(len);
 }
 
@@ -242,30 +243,28 @@ int testSwitchFunc(int no_var, double *test_vars, double t)
 {
 	SEXP fcall, p1, p2, result;
 	int len;
-	
+
 	if (isNull(r_stuff.switchFunc))
 		return 0;
-	
+
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
-    
+
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(no_var));
+	p2 = PROTECT(NEW_NUMERIC(no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), test_vars, no_var*sizeof(double));
 	
 	if (r_stuff.useParms)
-		PROTECT(fcall = lang4(r_stuff.switchFunc, p1, p2, r_stuff.parms));
-    else
-   		PROTECT(fcall = lang3(r_stuff.switchFunc, p1, p2));
-    PROTECT(result = eval(fcall, r_stuff.env));
-    
+		fcall = PROTECT(lang4(r_stuff.switchFunc, p1, p2, r_stuff.parms)); /* protect 3 */
+	else
+		fcall = PROTECT(lang3(r_stuff.switchFunc, p1, p2)); /* protect 3 */
+	result = PROTECT(eval(fcall, r_stuff.env)); /* protect 4 */
+
 	if (!isReal(result)) {
 		error("func return error: should return numeric vector or list. (got type \"%i\")\n", TYPEOF(result));
 	}
-	
 	len = LENGTH(result);
-	
 	UNPROTECT(4);
 	return(len);
 }
@@ -279,38 +278,41 @@ int testMapFunc(int no_var, double *test_vars, double t, int switch_num)
 		error("mapFunc is missing, but switchFunc was supplied. both must be defined, or both null");
 	
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
-    
+
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(no_var));
+	p2 = PROTECT(NEW_NUMERIC(no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), test_vars, no_var*sizeof(double));
 
 	/* argument 3 `switchnum' */
-	PROTECT(p3=NEW_NUMERIC(1));
+	p3 = PROTECT(NEW_NUMERIC(1)); /* protect 3 */
 	NUMERIC_POINTER(p3)[0] = switch_num;
 
 	if (r_stuff.useParms)
-    	PROTECT(fcall = lang5(r_stuff.mapFunc, p1, p2, p3, r_stuff.parms));
-    else
-		PROTECT(fcall = lang4(r_stuff.mapFunc, p1, p2, p3));	
-    PROTECT(result = eval(fcall, r_stuff.env));
-    
+		fcall = PROTECT(lang5(r_stuff.mapFunc, p1, p2, p3, r_stuff.parms)); /* protect 4 */
+	else
+		fcall = PROTECT(lang4(r_stuff.mapFunc, p1, p2, p3)); /* protect 4 */
+	result = PROTECT(eval(fcall, r_stuff.env)); /* protect 5 */
+
 	if (!isReal(result))
 		error("mapFunc return error: should return numeric vector. (got type \"%i\")\n", TYPEOF(result));
-		
+
 	len = LENGTH(result);
 	if (len != no_var)
 		error("mapFunc return error: should return vector of length %i \n", no_var);
-	
+
 	UNPROTECT(5);
 	return(len);
 }
 
 /*===========================================================================*/
+/* The SEXP in the argument list of the function are automatically protected,*/
+/* which is one reason to treat them as read-only and never modify them.     */
+/*===========================================================================*/
 SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit, SEXP parms, SEXP settings, SEXP outtimes)
 {
-	SEXP list, vect, extra_names, yinit_names, names;
+	SEXP list, vect, extra_names, yinit_names, names; /* need protecting*/
 	PROTECT_INDEX extra_names_ipx;
 	double *p, *otimes; /* bjc 2007-05-08*/
 	int i,j, no_var, no_otherVar, no_switch, no_otimes; /* bjc 2007-05-08*/
@@ -321,7 +323,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 		memory_freed = 1;
 		freeglobaldata();
 	}
-	
+
 	/* save R global data for later */
 	if(!isFunction(gradFunc)) error("\"gradFunc\" must be a function");
 	/*TODO check switchFunc is a func, or mark as missing or null*/
@@ -339,12 +341,13 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	r_stuff.outtimes = outtimes; /* bjc 2007-05-08: add times to R data*/
 	
 	/* check if supplied function is func(y,t) or func(y,t,parms) */
-	list = FORMALS(gradFunc);
+	list = PROTECT(FORMALS(gradFunc)); /* protect 1 */
 	i=0;
 	while (list != R_NilValue) {
 		i++;
 		list = CDR(list);
 	}
+	UNPROTECT(1);
 	if (i!=2 && i!=3) error("\"gradFunc\" must be in the form func(y,t) or func(y,t,parms)");
 	r_stuff.useParms = (i==3); /* only use parms if 3 arguments */
 	
@@ -354,22 +357,23 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	   ***must set the_test_phase to avoid errors in pastvalue and pastgradient */
 	the_test_phase=1;
 	PROTECT_WITH_INDEX(extra_names=R_NilValue, &extra_names_ipx);
-	no_otherVar=testFunc(no_var, NUMERIC_POINTER(yinit), NUMERIC_POINTER(settings)[1], 
-	                     &extra_names, &extra_names_ipx);
-	
+
+	no_otherVar = testFunc(no_var, NUMERIC_POINTER(yinit), 
+		NUMERIC_POINTER(settings)[1], &extra_names, &extra_names_ipx);
+
 	/* test switchfunc and get number of results returned to set nsw */
 	no_switch = testSwitchFunc(no_var, NUMERIC_POINTER(yinit), NUMERIC_POINTER(settings)[1]);
-	
+
 	/*test mapfunc for each nsw and check return val length*/
 	for( i = 1; i <= no_switch; i++ )
 		testMapFunc(no_var, NUMERIC_POINTER(yinit), NUMERIC_POINTER(settings)[1], i);
-	
+
 	the_test_phase=0;
-	
+
 	/* print names to see if it works */
-	PROTECT(names = allocVector(STRSXP, no_otherVar + no_var + 1));
-	yinit_names = GET_NAMES(yinit);
-	
+	names = PROTECT(allocVector(STRSXP, no_otherVar + no_var + 1)); /* protect 1 */
+	yinit_names = PROTECT(GET_NAMES(yinit)); /* protect 2 */
+
 	/* fill up names as <- c("time", names(yinit), names(extra_returned_vector)) */
 	SET_STRING_ELT(names, 0, mkChar("time"));
 	for(i=0;i<no_var;i++) {
@@ -390,19 +394,16 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 			SET_STRING_ELT(names, i+no_var+1, STRING_ELT(extra_names, i));
 		}
 	}
-
-	
-	/* bjc 2007-05-08:  check that the output times are numeric and get 
-	   a pointer and length */
+	/* bjc 2007-05-08:  check that the output times are numeric and get a pointer and length */
 	if (!isNumeric(outtimes)) { /* bjc 2007-05-08: if NULL*/
-	    otimes = NULL;
-	    no_otimes = 0;
+		otimes = NULL;
+		no_otimes = 0;
 	}
 	else { /* bjc 2007-05-08: if numeric*/
-	    otimes = NUMERIC_POINTER(outtimes); 
-	    no_otimes = LENGTH(outtimes);
+		otimes = NUMERIC_POINTER(outtimes); 
+		no_otimes = LENGTH(outtimes);
 	}
-	
+
 	setupglobaldata(LENGTH(yinit), no_otherVar, no_switch, NUMERIC_POINTER(settings), otimes, no_otimes); /* bjc 2007-05-08*/
 	memory_freed = 0;
 	
@@ -410,22 +411,19 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	numerics(NUMERIC_POINTER(yinit), 0, 0);
 	
 	/* create list which will be base of polyset global_data.frame */
-	PROTECT(list=allocVector(VECSXP, global_data.no_var+global_data.no_otherVars+1));
-	
+	list = PROTECT(allocVector(VECSXP, global_data.no_var+global_data.no_otherVars+1)); /* protect 3 */
+
 	/* room for all data (Y) AND time (T) */
 	for(j=0;j<(global_data.no_var+global_data.no_otherVars+1);j++) {
 		/* create numeric vector */
-		PROTECT(vect=NEW_NUMERIC(global_data.vals_ind));
-
+		vect = PROTECT(NEW_NUMERIC(global_data.vals_ind)); /* protect 4 */
 		/* and fill it up */
-		p=NUMERIC_POINTER(vect);
+		p = NUMERIC_POINTER(vect);
 		for(i=0;i<global_data.vals_ind;i++)
-			p[i]=global_data.vals[j][i];
-
+			p[i] = global_data.vals[j][i];
 		SET_VECTOR_ELT(list, j, vect);
-		UNPROTECT(1);
+		UNPROTECT(1); /* unprotect 4 */
 	}
-	
 
 	/* Set the names to the global_data.frame */
 	/* if names are set as realname.y1 - it's because R is stupid and concatenates name history together:
@@ -433,10 +431,9 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	y1 <- 5 * wn[1]; 	y2 <- wn[2] + wn[1];
 	vals <- c( y1=y1, y2=y2 ); 	names( vals );
 	*/
-		
 	setAttrib(list, R_NamesSymbol, names);
 
-	UNPROTECT( 3 );
+	UNPROTECT(4); /* As for 'do_lapply' in 'apply.c' of R-dev's src/main, need to UNPROTECT 'PROTECT_WITH_INDEX'*/
 	freeglobaldata();
 	memory_freed = 1;
 	return list;
@@ -466,11 +463,9 @@ SEXP getPastValue(SEXP t, SEXP markno)
 		error("t is out of bounds and should be >= t0 and < t.\nCalling pastvalue(t) is not allowed.");
 	}
 
-	PROTECT(value=NEW_NUMERIC(global_data.no_var));
+	value = PROTECT(NEW_NUMERIC(global_data.no_var));
 	for(i=0;i<global_data.no_var;i++) {
-		NUMERIC_POINTER(value)[i] = pastvalue(i,
-		                                      *NUMERIC_POINTER(t),
-		                                      *INTEGER_POINTER(markno));
+		NUMERIC_POINTER(value)[i] = pastvalue(i, *NUMERIC_POINTER(t), *INTEGER_POINTER(markno));
 	}
 	UNPROTECT(1);
 	return(value);
@@ -498,11 +493,9 @@ SEXP getPastGradient(SEXP t, SEXP markno)
 	if (NUMERIC_POINTER(t)[0] < global_data.t0 || NUMERIC_POINTER(t)[0] >= global_data.current_t) 
 		error("t is out of bounds and should be >= t0 and < t.\nCalling pastvalue(t) is not allowed.");
 
-	PROTECT(value=NEW_NUMERIC(global_data.no_var));
+	value = PROTECT(NEW_NUMERIC(global_data.no_var));
 	for(i=0;i<global_data.no_var;i++) {
-		NUMERIC_POINTER(value)[i] = pastgradient(i,
-		                                         *NUMERIC_POINTER(t),
-		                                         *INTEGER_POINTER(markno));
+		NUMERIC_POINTER(value)[i] = pastgradient(i, *NUMERIC_POINTER(t), *INTEGER_POINTER(markno));
 	}
 	UNPROTECT(1);
 	return(value);

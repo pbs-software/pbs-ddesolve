@@ -1,6 +1,6 @@
 #include <math.h>
+#include "ddesolve95.h"
 #include "ddeq.h"
-#include "PBSddesolve.h"
 
 
 /***************************************************************************/
@@ -10,12 +10,11 @@
 
 
 /***************************************************************************/
-/*             Problem specific routines           								*/
+/*             Problem specific routines                                   */
 /***************************************************************************/
 
 void switchfunctions(sw,s,c,t)
 double *sw,*s,*c,t;
-
 
 /* This routine sets the values of the switch functions. When the switch
 	functions pass through zero from positive to negative the state variables
@@ -34,28 +33,25 @@ double *sw,*s,*c,t;
 		return;
 
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
 
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	p2 = PROTECT(NEW_NUMERIC(global_data.no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
-	
+
 	/* call R user function */
 	if (r_stuff.useParms)
-		PROTECT(fcall = lang4(r_stuff.switchFunc, p1, p2, r_stuff.parms));
-    else
-   		PROTECT(fcall = lang3(r_stuff.switchFunc, p1, p2));
+		fcall = PROTECT(lang4(r_stuff.switchFunc, p1, p2, r_stuff.parms)); /* protect 3 */
+	else
+		fcall = PROTECT(lang3(r_stuff.switchFunc, p1, p2)); /* protect 3 */
+	result = PROTECT(eval(fcall, r_stuff.env)); /* protect 4 */
 
-    PROTECT(result = eval(fcall, r_stuff.env));
-    
 	/* copy data from R into `sw' */
 	memcpy(sw, NUMERIC_POINTER(result), global_data.nsw*sizeof(double));
 
 	UNPROTECT(4);
 }
-
-
 
 void map(s,c,t,swno)
 double *s,*c,t;int swno;
@@ -67,7 +63,6 @@ double *s,*c,t;int swno;
 	  { s[0]=coeff[1]*(s[0]);}
 	time and the coefficients should not be changed.
 */
-
 {
 	SEXP fcall, p1, p2, p3, result;
 
@@ -75,32 +70,29 @@ double *s,*c,t;int swno;
 		return;
 
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
-    
+
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	p2 = PROTECT(NEW_NUMERIC(global_data.no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
 
 	/* argument 3 `switchnum' */
-	PROTECT(p3=NEW_NUMERIC(1));
+	p3 = PROTECT(NEW_NUMERIC(1)); /* protect 3 */
 	NUMERIC_POINTER(p3)[0] = swno + 1; /* use R's index starting at 1 idiology */
 	
 	/* call R user function */
 	if (r_stuff.useParms)
-    	PROTECT(fcall = lang5(r_stuff.mapFunc, p1, p2, p3, r_stuff.parms));
-    else
-		PROTECT(fcall = lang4(r_stuff.mapFunc, p1, p2, p3));
-    PROTECT(result = eval(fcall, r_stuff.env));
-    
+		fcall = PROTECT(lang5(r_stuff.mapFunc, p1, p2, p3, r_stuff.parms)); /* protect 4 */
+	else
+		fcall = PROTECT(lang4(r_stuff.mapFunc, p1, p2, p3)); /* protect 4 */
+	result = PROTECT(eval(fcall, r_stuff.env)); /* protect 5 */
+
 	/* copy returned data from R into `s' */
 	memcpy(s, NUMERIC_POINTER(result), global_data.no_var*sizeof(double));
-	
+
 	UNPROTECT(5);
 }
-
-
-
 
 void grad(g,s,c,t)
 double *g,*s,*c,t;
@@ -118,55 +110,54 @@ double *g,*s,*c,t;
     pastvalue(0,t-T,0) and pastvalue(0,t-2*T,0). The latter works, it's just
     slower because more time is spent searching for lagged values)
 */
-
 { 
 	SEXP fcall, p1, p2, result, yinit_names, names;
 	int i;
-	
+
 	/* store current t, to prevent calls to pastvalue(t) */
 	global_data.current_t = t;
-	
+
 	/* argument 1 `t' */
-	PROTECT(p1=NEW_NUMERIC(1));
+	p1 = PROTECT(NEW_NUMERIC(1)); /* protect 1 */
 	memcpy(NUMERIC_POINTER(p1), &t, sizeof(double));
 
 	/* argument 2 `s' */
-	PROTECT(p2=NEW_NUMERIC(global_data.no_var));
+	p2 = PROTECT(NEW_NUMERIC(global_data.no_var)); /* protect 2 */
 	memcpy(NUMERIC_POINTER(p2), s, global_data.no_var*sizeof(double));
 
 	/* Create the names vector. TODO: do this only once, and not in this function.
-	Perhaps the testFunc section would be more appropriate */	
-	yinit_names = GET_NAMES(r_stuff.yinit);
-	PROTECT(names = allocVector(STRSXP, global_data.no_var));
+	Perhaps the testFunc section would be more appropriate */
+	yinit_names = PROTECT(GET_NAMES(r_stuff.yinit)); /* protect 3 */
+	names = PROTECT(allocVector(STRSXP, global_data.no_var)); /* protect 4 */
 	if( isNull(yinit_names) == 0 ) {
 		for( i = 0; i < global_data.no_var; i++ ) {
 			SET_STRING_ELT(names, i, STRING_ELT(yinit_names, i));
 		}
 		setAttrib(p2, R_NamesSymbol, names);
 	}
-	
+
 	/* call R user function */
 	if (r_stuff.useParms)
-		PROTECT(fcall = lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms));
+		fcall = PROTECT(lang4(r_stuff.gradFunc, p1, p2, r_stuff.parms)); /* protect 5 */
 	else
-		PROTECT(fcall = lang3(r_stuff.gradFunc, p1, p2));
-	PROTECT(result = eval(fcall, r_stuff.env));
-    
+		fcall = PROTECT(lang3(r_stuff.gradFunc, p1, p2)); /* protect 5 */
+	result = PROTECT(eval(fcall, r_stuff.env)); /* protect 6 */
+
 	/* copy data from R into `g' */
-    	/* ACB: `g' can be NULL when called by output(); this is only the case when no_var > 0
+	/* ACB: `g' can be NULL when called by output(); this is only the case when no_var > 0
 	 * this is to compute the other vars at a specific time t (versus t+/-stepsize) */
 	if (r_stuff.gradFuncListReturn) {
-		p1=VECTOR_ELT(result, 0);
+		p1 = VECTOR_ELT(result, 0);
 		if( g != NULL )
 			memcpy(g, NUMERIC_POINTER(p1), global_data.no_var*sizeof(double));
 		if (global_data.no_otherVars>0) {
-			p2=VECTOR_ELT(result, 1);
+			p2 = VECTOR_ELT(result, 1);
 			memcpy(global_data.tmp_other_vals, NUMERIC_POINTER(p2), global_data.no_otherVars*sizeof(double));
 		}
 	} else if( g != NULL ) {
 		memcpy(g, NUMERIC_POINTER(result), global_data.no_var*sizeof(double));
 	}
-	UNPROTECT(5);
+	UNPROTECT(6);
 }
 
 void storehistory(his,ghis,g,s,c,t)
@@ -175,10 +166,9 @@ double *his,*ghis,*g,*s,*c,t;
 /* This is the routine in which the values of the history variables at time
 	t are calculated and put in the array his, along with gradients in ghis,
 	using state variables s, gradients of s, g, and coefficients c
-   e.g. if the state variable 2 is history variable 0, you would need the line:
-   his[0]=s[2];ghis[0]=g[2];
+	e.g. if the state variable 2 is history variable 0, you would need the line:
+	his[0]=s[2];ghis[0]=g[2];
 */
-
 {
 	int i;
 	for(i=0;i<global_data.no_var;i++) {
@@ -186,8 +176,6 @@ double *his,*ghis,*g,*s,*c,t;
 		ghis[i]=g[i];
 	}
 }
-
-
 
 void statescale(double *scale)
 /* In this routine you can set scale factors for error control. For each

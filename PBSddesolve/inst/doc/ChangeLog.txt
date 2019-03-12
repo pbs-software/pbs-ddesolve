@@ -7,167 +7,260 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.4 (2019-03-11) [Rcheck=T, Rbuild=T]
+  * C code
+    + Altered calls to PROTECT in `PBSddesolve.c' and `r_model.c. (RH 2019-03-11)
+      - C function `startDDE' needed an additional UNPROTECT for the PROTECT_WITH_INDEX
+      - Similar to the additional UNPROTECT found in C function `do_lapply' in `apply.c' of R-dev's src/main.
+    + Stack imbalances generated (2019-03-11)
+      - blowflies:
+      -  Warning: stack imbalance in '<-', 71 then 72
+      -  Warning: stack imbalance in '{', 67 then 68
+      -  Warning: stack imbalance in '{', 53 then 54
+      -  Warning: stack imbalance in 'withVisible', 35 then 36
+      -  Warning: stack imbalance in 'standardGeneric', 26 then 27
+      - cooling:
+      -  Warning: stack imbalance in '<-', 29 then 30
+      -  Warning: stack imbalance in '{', 25 then 26
+      - icecream:
+      -  Warning: stack imbalance in '<-', 71 then 72
+      -  Warning: stack imbalance in '<-', 72 then 73
+      -  Warning: stack imbalance in '{', 67 then 69
+      -  Warning: stack imbalance in '{', 53 then 55
+      -  Warning: stack imbalance in 'withVisible', 35 then 37
+      -  Warning: stack imbalance in 'standardGeneric', 26 then 28
+      - lorenz:
+      -  Warning: stack imbalance in '<-', 29 then 30
+      -  Warning: stack imbalance in '{', 25 then 26
+
+1.12.3 (2019-03-07) [Rcheck=T, Rbuild=T]
+  * C code
+    + Registered C routines using `init.c' from PBSmodelling|PBSmapping as a template. (RH 190305)
+      - Renamed `PBSddesolve.h ' to `ddesolve95.h'
+      - Created new header file `PBSddesolve.h' for use with `init.c'
+    + Attempted to fix CRAN issues in `r_model.c' and `PBSddesolve.c'. (RH 190306)
+      - Function grad
+      -  [UP] unprotected variable yinit_names while calling allocating function Rf_allocVector PBSddesolve/src/r_model.c:140
+      - Function startDDE
+      -  [UP] unprotected variable yinit_names while calling allocating function Rf_mkChar PBSddesolve/src/PBSddesolve.c:374
+      -  [UP] unprotected variable yinit_names while calling allocating function Rf_mkChar PBSddesolve/src/PBSddesolve.c:379
+      -  [UP] unprotected variable list while calling allocating function freeglobaldata PBSddesolve/src/PBSddesolve.c:440
+      - Function testFunc
+      -  [UP] unprotected variable yinit_names while calling allocating function Rf_allocVector PBSddesolve/src/PBSddesolve.c:186
+  * Documentation
+    + Updated the vignette `PBSddesolveIntro.Rnw|pdf'. (RH 190306)
+
 1.12.2 (2016-09-20)
-  • You need to set the BINPREF variable in etc/.../Makeconf and you can omit the ? (Uwe Ligges 2016-04-18)
-	Old: BINPREF ?= c:/Rtools/mingw_64/bin/
-	New: BINPREF = C:/Apps/R/Rtools/mingw_64/bin/
-  • Fixed bug in `run_tests.r' but tests of `all(out$y1==yinit)' in `test.simple' (runit.dde.r) return FALSE -- problem in `dde'? (RH 160914)
-  • Renamed directory `tests' to `unitTests' (as done by PBSmodelling) to avoid testing by Duncan Murdoch's changes to `R CMD check' and `testInstalledPackage()' (RH 1609014)
+  * Documentation
+    + Changed backticks ` in DESCRIPTION to single quotes ' (Kurt Hornik 2016-09-20)
+  * C code
+    + You need to set the BINPREF variable in etc/.../Makeconf and you can omit the ? (Uwe Ligges 2016-04-18)
+      - Old: BINPREF ?= c:/Rtools/mingw_64/bin/
+      - New: BINPREF = C:/Apps/R/Rtools/mingw_64/bin/
+  * R code
+    + Fixed bug in `run_tests.r' but tests of `all(out$y1==yinit)' in `test.simple' (runit.dde.r) return FALSE -- problem in `dde'? (RH 160914)
+    + Renamed directory `tests' to `unitTests' (as done by PBSmodelling) to avoid testing by Duncan Murdoch's changes to `R CMD check' and `testInstalledPackage()' (RH 1609014)
 
 1.12.1 (2016-04-18)
-  • Updated the User's Guide. (RH 160418)
-  • Revised the vignette `PBSddesolveIntro.Rnw' and DESCRIPTION file. (RH 160414).
+  * Documentation
+    + Updated the User's Guide. (RH 160418)
+    + Revised the vignette `PBSddesolveIntro.Rnw' and DESCRIPTION file. (RH 160414).
 
 1.12.0 2015-08-19 (JTS)
-  - First semantic version number x.y.z
+  * Documentation
+    + First semantic version number x.y.z
 
 1.11  2015-06-15
-  • Last update to Google Code before transferring pbs-ddesolve repository to GitHub. (RH 150615)
-  • Changed `yout1$t' to `yout1$time' and `yout2$t' to `yout2$time' in `icePlot' to eliminate partial matching warnings. (RH 140514)
-	Also changed `x$t' to `x$time' in blowflies example `runPlot'; disallowed A0<=0 by setting to GT0(A0) if needed.
-  • Fixed overflow of `otimes' within dde(...). (NB 140509)
-	valgrind identified an invalid read within dde(...): the array `otimes' was being overflowed by one element. 
-	This commit fixes that overflow and another potential problem that would occur if `otimes' ever had a length of 0, 
-	which is a possibility mentioned in the function startDDE(...) of PBSddesolve.c.
-  • Removed deprecated partial matching in example code. (NB 140509)
-	The example code used partial matching when accessing the data frame, i.e., yout$t to access "time".
-	This feature has been deprecated and now produces a warning.
-  • JTS requested that RH becomes the package Maintainer. (RH 140327)
-  • Bumped up version for next posting to CRAN using builds under R-3.0.3 (RH 140320)
+  * Documentation
+    + Last update to Google Code before transferring pbs-ddesolve repository to GitHub. (RH 150615)
+  * R code
+    + Changed `yout1$t' to `yout1$time' and `yout2$t' to `yout2$time' in `icePlot' to eliminate partial matching warnings. (RH 140514)
+      - Also changed `x$t' to `x$time' in blowflies example `runPlot'; disallowed A0<=0 by setting to GT0(A0) if needed.
+    + Fixed overflow of `otimes' within dde(...). (NB 140509)
+      - valgrind identified an invalid read within dde(...): the array `otimes' was being overflowed by one element. 
+      - This commit fixes that overflow and another potential problem that would occur if `otimes' ever had a length of 0, 
+      - which is a possibility mentioned in the function startDDE(...) of PBSddesolve.c.
+    + Removed deprecated partial matching in example code. (NB 140509)
+      - The example code used partial matching when accessing the data frame, i.e., yout$t to access "time".
+      - This feature has been deprecated and now produces a warning.
+  * Administration
+    + JTS requested that RH becomes the package Maintainer. (RH 140327)
+    + Bumped up version for next posting to CRAN using builds under R-3.0.3 (RH 140320)
 
 1.10  2013-05-03
-  • Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated weblinks. (RH 130503)
-  • Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 130502)
-  • Introduced new temporary working environment `.PBSddeEnv` in which examples can be run. (RH 130502)
-  • Fix "start time" bug introduced in r19 ( issue 4 ) (NB 130502)
-	In r19, a line that initialized t to t0 was cut.  This update restores that line and addresses  issue 4 .
-	This update also renames an identifier so that it now differs from the R "error" function.
-  • Moved `PBSddesolveIntro.Rnw` to `vignettes` directory. (RH 130425)
-  • Advanced version for resubmission to CRAN and to avoid some nonsense message during Rcheck:
-	`Version contains leading zeroes (1.09)` (RH 130425)
+  * Documentation
+    + Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated weblinks. (RH 130503)
+    + Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 130502)
+  *R code
+    + Introduced new temporary working environment `.PBSddeEnv` in which examples can be run. (RH 130502)
+    + Fix "start time" bug introduced in r19 ( issue 4 ) (NB 130502)
+      - In r19, a line that initialized t to t0 was cut.  This update restores that line and addresses  issue 4 .
+      - This update also renames an identifier so that it now differs from the R "error" function.
+  * Administration
+    + Moved `PBSddesolveIntro.Rnw` to `vignettes` directory. (RH 130425)
+    + Advanced version for resubmission to CRAN and to avoid some nonsense message during Rcheck:
+      - `Version contains leading zeroes (1.09)` (RH 130425)
 
 1.09  2013-04-25
-  • Fixed compilation issue on Windows along with two compiler warnings. (NB 130425)
-  • Moved banner message to `.onAttach` and fixed warnings. (NB 130323)
-  • Removed `info` (unused) and `PBSerror`, and added calls to `error`. (NB 121205)
-  • Changed an 'exit' to a 'return' in 'PBSddesolve.c'. (RH 121101)
-  • JTS changed email address to schnutej-dfo@shaw.ca (RH 121031)
-  • R-2.14.0 requires namespace and loading via '.onLoad'. (RH 121110)
+  * C code
+    + Fixed compilation issue on Windows along with two compiler warnings. (NB 130425)
+    + Moved banner message to `.onAttach` and fixed warnings. (NB 130323)
+    + Removed `info` (unused) and `PBSerror`, and added calls to `error`. (NB 121205)
+    + Changed an 'exit' to a 'return' in 'PBSddesolve.c'. (RH 121101)
+  * Administration
+    + JTS changed email address to schnutej-dfo@shaw.ca (RH 121031)
+    + R-2.14.0 requires namespace and loading via '.onLoad'. (RH 121110)
 
 1.08  2010-11-07  ACB
-  • Merged in Bobby's memory clean up modifications. (ACB 101107)
-  • Added check to delete global memory when startDDE is interrupted by the user,
-	memory is only cleared on subsequent calls to startDDE (or clean exits). (ACB 101104)
-  • Removed dummy_var nonsense, and refactored to simply pass a NULL rather than have a static pointer malloced 
-	(which caused a potential buffer overflow on subsequent calls with larger number of variables to solve). (ACB 101104)
-  • Fixed memory leak; fixes Issue 3. (ACB 101003)
-  • Moved old ddesolve to branches. (ACB 100927)
-  • Added 'freeglobaldata()' to PBSddesolve.c to fix memory leak. (ACB 100827)
-  • Included the short deprecated version of ddesolve. (ACB 100623)
-  • Added a minor comment to PBSddesolve.c. Changed version to 1.08. (ACB 100420)
+  * C code
+    + Merged in Bobby's memory clean up modifications. (ACB 101107)
+    + Added check to delete global memory when startDDE is interrupted by the user,
+      - memory is only cleared on subsequent calls to startDDE (or clean exits). (ACB 101104)
+    + Removed dummy_var nonsense, and refactored to simply pass a NULL rather than have a static pointer malloced 
+      - (which caused a potential buffer overflow on subsequent calls with larger number of variables to solve). (ACB 101104)
+    + Fixed memory leak; fixes Issue 3. (ACB 101003)
+    + Moved old ddesolve to branches. (ACB 100927)
+    + Added 'freeglobaldata()' to PBSddesolve.c to fix memory leak. (ACB 100827)
+    + Included the short deprecated version of ddesolve. (ACB 100623)
+    + Added a minor comment to PBSddesolve.c. Changed version to 1.08. (ACB 100420)
 
 1.07  2010-04-14  RH
- - Modified zzz.r to generate an automatic message upon loading the package.
+  * R code
+    + Modified zzz.r to generate an automatic message upon loading the package.
 
 1.06  2010-04-13  JTS
- - Modified C function lang5 by enclosing in '#ifndef lang5 ... #endif' (thanks Martin Maechler, CRAN).
+  * C code
+    + Modified C function lang5 by enclosing in '#ifndef lang5 ... #endif' (thanks Martin Maechler, CRAN).
 
-*** Code repository transferred to SVN website http://code.google.com/p/pbs-ddesolve/ ***
+  * Administration
+    + Code repository transferred to SVN website http://code.google.com/p/pbs-ddesolve/ 
 
 1.05  2008-09-19  RH
- - Changed package name to 'PBSddesolve' from 'PBSdde' (thanks Andy).
- - Added vignette 'PBSddesolveIntro.Rmw'.
- - Changed 'lorenz' demo pairs to use pch=15, cex=0.2 (works on Windows and Ubuntu UNIX).
+  * Documentation
+    + Changed package name to 'PBSddesolve' from 'PBSdde' (thanks Andy).
+    + Added vignette 'PBSddesolveIntro.Rmw'.
+  * R code
+    + Changed 'lorenz' demo pairs to use pch=15, cex=0.2 (works on Windows and Ubuntu UNIX).
 
 1.04  2008-08-01  RH
- - Changed package name to 'PBSdde' from 'ddesolve'.
- - Changed 'lorenz' demo pairs to use pch="." (before: pch=183 does not work on UNIX).
+  * Documentation
+    + Changed package name to 'PBSdde' from 'ddesolve'.
+  * R code
+    + Changed 'lorenz' demo pairs to use pch="." (before: pch=183 does not work on UNIX).
 
 1.03  2008-06-08  ACB
- - Fixed examples to correctly set names.
+  * R code
+    + Fixed examples to correctly set names.
 
 1.02  2008-04-15  ACB
- - Allow gradient to return a list of length one.
- - Set state variable names so they are available for use in the gradient function.
- - Moved documents to correct vignette locations.
+  * C code
+    + Allow gradient to return a list of length one.
+    + Set state variable names so they are available for use in the gradient function.
+  * Documentation
+    + Moved documents to correct vignette locations.
 
 1.01  2007-10-01  ACB
- - Removed c++ style comments to remove warnings for 2.6.0 release.
+  * C code
+    + Removed c++ style comments to remove warnings for 2.6.0 release.
 
 1.00  2007-07-17  RH
- - Revised Users Guide (also added reference to FishRes in PBSmodelling).
- - Revised examples to deal with slight flaw in PBSmodelling's resetGraph().
- - Created *_doc.pdf files for the examples to replace the *_doc.txt files
-     (also altered the win files to get the PDFs).
+  * Documentation
+    + Revised Users Guide (also added reference to FishRes in PBSmodelling).
+  * R code
+    + Revised examples to deal with slight flaw in PBSmodelling's resetGraph().
+    + Created *_doc.pdf files for the examples to replace the *_doc.txt files;
+      - also altered the win files to get the PDFs.
 
 0.63  2007-07-16  RH
- - Revised examples, Rd file
- - Revised icecream example to show use of the argument "parms".
+  * R code
+    + Revised examples, Rd file
+    + Revised icecream example to show use of the argument "parms".
 
 0.62  2007-07-13  RH
- - Revised examples (blowflies, cooling, icecream).
- - JTS revised Users Guide.
+  * R code
+    + Revised examples (blowflies, cooling, icecream).
+  * Documentation
+    + JTS revised Users Guide.
 
 0.61  2007-07-12  ACB
- - Added ability to have parms argument for maps and switches if parms is given to dde.
+  * C code
+    + Added ability to have parms argument for maps and switches if parms is given to dde.
 
 0.60  2007-06-27  RH
- - Revised Rd file.
- - Revised UG.
+  * Documentation
+    + Revised Rd file.
+    + Revised UG.
 
 0.59  2007-06-10  RH
- - Revised ice cream example and created GUI for it.
+  * R code
+    + Revised ice cream example and created GUI for it.
 
 0.58  2007-06-10  ACB
- - Changed switch numbering to 1..N range.
+  * C code
+    + Changed switch numbering to 1..N range.
 
 0.57  2007-06-04  ACB
- - Added call to grad() from output() to ensure that extra info is accurate
-     when interpolating to solve for explicit times.
+  * C code
+    + Added call to grad() from output() to ensure that extra info is accurate when interpolating to solve for explicit times.
 
 0.56  2007-05-30  ACB
- - Removed by argument from R and C code.
+  * R|C code
+    + Removed by argument from R and C code.
 
 0.55  2007-05-30  RH
- - Merged ACB's 0.54 dde() wrapper with BJC's desolve() wrapper 
-     (only times specified; no 'from,to,by').
+  * R code
+    + Merged ACB's 0.54 dde() wrapper with BJC's desolve() wrapper;
+      - only times specified; no 'from,to,by'.
 
 0.54  2007-05-29  ACB
- - Fixed bug in dde() where outtimes wasnt passed correctly.
+  * R code
+    + Fixed bug in dde() where outtimes wasnt passed correctly.
 
 0.53  2007-05-24  ACB
- - Merged in Ben's code.
+  * C code
+    + Merged in Ben's code.
 
 0.52  2007-05-18  ACB
- - Added switch functionality - still needs documentation.
+  * C code
+    + Added switch functionality - still needs documentation.
 
 0.51  2007-05-06  ACB
- - Renamed initstate to ddeinitstate in C code.
+  * C code
+    + Renamed initstate to ddeinitstate in C code.
 
 0.50  2007-05-05  ACB
- - Released to Cran as version 0.50.
+  * Administration
+    + Released to Cran as version 0.50.
 
 0.07  2007-03-12  ACB
- - Added check for restoring working directories in demos.
+  * R code
+    + Added check for restoring working directories in demos.
 
 0.06  2007-03-11  ACB
- - Removed .rc files.
+  * R code
+    + Removed .rc files.
 
 0.05  2007-03-03  ACB
- - Changed demos.
+  * R code
+    + Changed demos.
 
 0.04  2007-02-23  ACB
- - Added error checking to prevent calls to pastvalue(t).
- - Switched order of `t` and `y` expected from user supplied `func`. Now is func(t,y,parms).
- - Created user guide "ddesolve-ug.pdf".
+  * R code
+    + Added error checking to prevent calls to pastvalue(t).
+    + Switched order of `t` and `y` expected from user supplied `func`. Now is func(t,y,parms).
+  * Documentation
+    + Created user guide "ddesolve-ug.pdf".
 
 0.03  2007-02-23  ACB
- - Fixed bug where pastvalue() could not be called during `func` test
-     it just returns initial values during the `func` test phase.
+  * R code
+    + Fixed bug where pastvalue() could not be called during `func` test
+      - it just returns initial values during the `func` test phase.
 
 0.02  2007-02-22  ACB
- - Added pastgradient R wrapper function.
- - Added demos.
+  * R code
+    + Added pastgradient R wrapper function.
+    + Added demos.
 
 0.01  2007-02-18  ACB
- - Created package around Simon Wood's numerical routinues from solv95.
+  * R code
+    + Created package around Simon Wood's numerical routinues from solv95.

@@ -1,72 +1,66 @@
-\documentclass[letter,12pt]{article}
+\documentclass[letter,11pt]{article}
 %\VignetteIndexEntry{Introduction to PBSddesolve}
 %\VignettePackage{PBSddesolve}
+\usepackage{Sweave}
 
 % For colors
 \usepackage{color}
-%\definecolor{red}{rgb}{0.8039216,0.2156863,0}
-\definecolor{red}{rgb}{1, 0, 0}
+\definecolor{red}{rgb}{0.8039216,0.2156863,0}
 \definecolor{green}{rgb}{0, 1, 0}
 \definecolor{blue}{rgb}{0, 0, 1}
 
 % Definitions
-\newcommand{\slan}{{\tt S}}
-\newcommand{\rlan}{{\tt R}}
-\newcommand{\pbsd}{{\tt PBSddesolve}}
-\newcommand{\pbsm}{{\tt PBSmodelling}}
-\newcommand{\tcl}{{\tt Tcl/Tk}}
-\newcommand{\code}[1]{{\tt #1}}
-\newcommand{\ital}[1]{{\it #1}}
-\newcommand{\bold}[1]{{\bf #1}}
+\newcommand{\slan}{\texttt{S}}
+\newcommand{\rlan}{\texttt{R}}
+\newcommand{\pbsd}{\texttt{PBSddesolve}}
+\newcommand{\pbsm}{\texttt{PBSmodelling}}
+\newcommand{\tcl}{\texttt{Tcl/Tk}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\ital}[1]{\textit{#1}}
+\newcommand{\bold}[1]{\textbf{#1}}
 \newcommand{\under}[1]{{\underline {#1}}}
 \newcommand{\red}[1]{{\textcolor{red} {#1}}}
 
 \usepackage{verbatim}
+\usepackage{hyperref}
 
 % Keep on one page
-\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[letterpaper, top=0.5in, bottom=0.5in, left=1in, right=1in, footskip=0in, headheight=0.5in]{geometry}
+%\textheight 9.0in \topmargin -1.0in
 
 \usepackage{hyperref}
-% from Sweave.Rnw in C:\Apps\R\R300\library\utils\doc
-\hypersetup{%
-colorlinks=true,%
-plainpages=true,%
-linkcolor=black,%
-citecolor=black,%
-urlcolor=blue,%
-pdfstartview=Fit, %{XYZ null null 1},%
-pdfview={XYZ null null null},%
-pdfpagemode=UseOutlines,% for bookmarks
-pdfauthor={Schnute et al.},%
-pdftitle={Introduction to PBSddesolve},%
-pdfsubject={PBS R package for DDEs}%
-}
-\renewcommand\UrlFont{\rmfamily\small}
-\setlength\parindent{0in} % sets indent to zero
+\hypersetup{colorlinks=true, plainpages=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+\renewcommand{\rmdefault}{phv}% Helvetica
+\renewcommand{\sfdefault}{phv}% Helvetica
+%\renewcommand{\ttdefault}{pcr}% Courier
+\usepackage[scaled=1.05]{inconsolata}
+\renewcommand{\ttdefault}{zi4}% Courier
+
 
 \begin{document}
 
-\title{Introduction to \pbsd{}}
-\author{Jon Schnute, Alex Couture-Beil, and Rowan Haigh}
+\title{Introduction to PBSddesolve}
+\author{Jon T. Schnute, Alex Couture-Beil, and Rowan Haigh}
 \maketitle
 
-\section{What is \pbsd{}?}
+\section{What is PBSddesolve?}
 
 \pbsd{} generates numerical solutions for systems of delay differential equations (DDEs) and ordinary differential equations (ODEs).
-The numerical routines come from \href{http://www.maths.bris.ac.uk/~sw15190/}{Simon Wood}'s program \code{solve95}, originally written in C for the Microsoft Windows operating systems. 
-With \pbsd{}, a user can write the gradient code for a system of DDEs or ODEs in the R language, rather than C.
+The numerical routines come from \href{https://people.maths.bris.ac.uk/~sw15190/}{Simon Wood}'s program \code{solve95}, originally written in C for the Microsoft Windows operating system.
+With \pbsd{}, a user can write the gradient code for a system of DDEs or ODEs in the R language, rather than in C.
 The code will then run on all platforms supported by R, and the results can be inspected using R's extensive graphics capabilities.
-Simon generously gave us permission to publish \code{PBSddesolve} (including his embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.
+Simon generously gave us permission to publish \pbsd{} (including his embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.
 
-\medskip
+%\medskip
 
-\red{\pbsd{} originally appeared on CRAN under the name \code{ddesolve}.
-That version is no longer supported. 
-The current name emphasizes a close association with other PBS packages, particularly \pbsm.}
+%\red{\pbsd{} originally appeared on CRAN under the name \code{ddesolve}.
+%That version is no longer supported. 
+%The current name emphasizes a close association with other PBS packages, particularly \pbsm.}
 
 \section{What is PBS?}
 
-The initials \bold{PBS} refer to the \href{http://www.pac.dfo-mpo.gc.ca/science/facilities-installations/pbs-sbp/index-eng.html}{Pacific Biological Station}, a major fisheries laboratory operated by Fisheries and Oceans Canada on the Pacific coast in \href{http://www.tourismnanaimo.com/}{Nanaimo}, British Columbia, Canada.
+The initials \bold{PBS} refer to the \href{http://www.pac.dfo-mpo.gc.ca/science/facilities-installations/index-eng.html#pbs}{Pacific Biological Station}, a major fisheries laboratory operated by Fisheries and Oceans Canada on the Pacific coast in Nanaimo, British Columbia, Canada.
 
 \section{Where is the User's Guide?}
 

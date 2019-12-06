@@ -25,6 +25,10 @@ PBSddesolve ", pkg_info$Version, " -- Copyright (C) 2007-",year," Fisheries and 
 A complete user guide 'PBSddesolve-UG.pdf' is located at 
 ", userguide_path, "
 
+GUI demos require package 'PBSmodelling' and include:
+blowflies, cooling, icecream, and lorenz
+When calling 'demo', set argument 'ask=FALSE'.
+
 Packaged on ", pkg_date, "
 Pacific Biological Station, Nanaimo
 

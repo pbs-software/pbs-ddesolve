@@ -7,6 +7,25 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.5 (2019-12-06) [Rcheck=T, Rbuild=T]
+  * C code
+    + Prof. Ripley noted `PBSddesolve fails to install with gcc trunk which is due to be released as gcc 10.0.x early in 2020.
+    + PBSddesolve.log shows:
+      - ddesolve95.h:38: multiple definition of `r_stuff'; ddesolve95.h:38: first defined here
+      - ddesolve95.h:37: multiple definition of `global_data'; ddesolve95.h:37: first defined here
+    + ACB suggested:
+      - change ddesolve95.h:38 to `extern globalRdatatype r_stuff;'
+      - then define the global in a c file as: `globalRdatatype r_stuff;'
+      - Same would apply to global_data. For some reason it looks like each time the header is included,
+      -  it's creating new memory for the structures in each c file since the extern keyword is missing.
+    + Altered `ddesolve95.h' (RH 191204)
+      - changed `globaldatatype global_data;' to `extern globaldatatype global_data;'
+      - changed `globalRdatatype r_stuff;'    to `extern globalRdatatype r_stuff;'
+    + Altered `PBSddesolve.c' (RH 191204)
+      - added `/* define globals */  globaldatatype global_data;  globalRdatatype r_stuff;'
+    + Altered `r_model.c' (RH 191204)
+      - added `/* define globals */  globaldatatype global_data;  globalRdatatype r_stuff;'
+
 1.12.4 (2019-03-11) [Rcheck=T, Rbuild=T]
   * C code
     + Altered calls to PROTECT in `PBSddesolve.c' and `r_model.c. (RH 2019-03-11)

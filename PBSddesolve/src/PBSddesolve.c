@@ -8,6 +8,11 @@
 
 #define CH_BUF_SIZE 128
 
+/* define globals */
+globaldatatype global_data;
+globalRdatatype r_stuff;
+
+
 int the_test_phase = 0;
 int memory_freed = 1; /* when set to 0, freeglobaldata() should be called on re-entering calls to startDDE - only applicable to interupted calculations */
 

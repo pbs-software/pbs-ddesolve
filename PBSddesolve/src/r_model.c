@@ -8,9 +8,6 @@
 /* grad() or switchfunctions(), directly or indirectly.                  	*/
 /***************************************************************************/
 
-/* define globals */
-globaldatatype global_data;
-globalRdatatype r_stuff;
 
 
 /***************************************************************************/

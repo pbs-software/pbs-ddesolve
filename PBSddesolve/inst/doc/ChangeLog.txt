@@ -7,6 +7,18 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.6 (2019-12-09) [Rcheck=T, Rbuild=T]
+  * C code
+    + Kurt Hornik noted: PBSddesolve_1.12.5.tar.gz still seems to fail to install with gcc10.
+      - Added -fno-common in various lines of Rdev's Makeconf files to check for duplicate declarations
+      -  (as per R-extensions: https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Common-symbols)
+      - CFLAGS = -O2 -Wall $(DEBUGFLAG) -std=gnu99 -mtune=generic -fno-common
+      - CXX11FLAGS = -O2 -Wall $(DEBUGFLAG) -mtune=generic -fno-common
+      - CXX14FLAGS = -O2 -Wall $(DEBUGFLAG) -mtune=generic -fno-common
+      - Rdevcheck fails when lines `globaldatatype global_data; globalRdatatype r_stuff;' appear in both `PBSddesolve.c' and `R-model.c'.
+      - Removed the declaration in 'r_model.c' and the check works OK, the build works OK, and the examples work.
+      - ACB approves changes.
+
 1.12.5 (2019-12-06) [Rcheck=T, Rbuild=T]
   * C code
     + Prof. Ripley noted `PBSddesolve fails to install with gcc trunk which is due to be released as gcc 10.0.x early in 2020.
@@ -108,7 +120,7 @@ Package authors:
 
 1.10  2013-05-03
   * Documentation
-    + Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated weblinks. (RH 130503)
+    + Updated `PBSddesolve-UG.pdf` to reflect new Lorenz GUI and updated web links. (RH 130503)
     + Updated `PBSddesolveIntro` Rnw and pdf to alert the reader that examples run in new environment called `.PBSddeEnv`. (RH 130502)
   *R code
     + Introduced new temporary working environment `.PBSddeEnv` in which examples can be run. (RH 130502)
@@ -135,7 +147,7 @@ Package authors:
     + Merged in Bobby's memory clean up modifications. (ACB 101107)
     + Added check to delete global memory when startDDE is interrupted by the user,
       - memory is only cleared on subsequent calls to startDDE (or clean exits). (ACB 101104)
-    + Removed dummy_var nonsense, and refactored to simply pass a NULL rather than have a static pointer malloced 
+    + Removed dummy_var nonsense, and re-factored to simply pass a NULL rather than have a static pointer malloced 
       - (which caused a potential buffer overflow on subsequent calls with larger number of variables to solve). (ACB 101104)
     + Fixed memory leak; fixes Issue 3. (ACB 101003)
     + Moved old ddesolve to branches. (ACB 100927)
@@ -233,7 +245,7 @@ Package authors:
 
 0.54  2007-05-29  ACB
   * R code
-    + Fixed bug in dde() where outtimes wasnt passed correctly.
+    + Fixed bug in dde() where outtimes wasn't passed correctly.
 
 0.53  2007-05-24  ACB
   * C code
@@ -249,7 +261,7 @@ Package authors:
 
 0.50  2007-05-05  ACB
   * Administration
-    + Released to Cran as version 0.50.
+    + Released to CRAN as version 0.50.
 
 0.07  2007-03-12  ACB
   * R code
@@ -282,4 +294,4 @@ Package authors:
 
 0.01  2007-02-18  ACB
   * R code
-    + Created package around Simon Wood's numerical routinues from solv95.
+    + Created package around Simon Wood's numerical routines from solv95.

@@ -47,7 +47,7 @@
 \section{What is PBSddesolve?}
 
 \pbsd{} generates numerical solutions for systems of delay differential equations (DDEs) and ordinary differential equations (ODEs).
-The numerical routines come from \href{https://people.maths.bris.ac.uk/~sw15190/}{Simon Wood}'s program \code{solve95}, originally written in C for the Microsoft Windows operating system.
+The numerical routines come from \href{https://www.maths.ed.ac.uk/~swood34/simon/dde.html}{Simon Wood}'s program \code{solve95}, originally written in C for the Microsoft Windows operating system.
 With \pbsd{}, a user can write the gradient code for a system of DDEs or ODEs in the R language, rather than in C.
 The code will then run on all platforms supported by R, and the results can be inspected using R's extensive graphics capabilities.
 Simon generously gave us permission to publish \pbsd{} (including his embedded routines) under the GNU GENERAL PUBLIC LICENSE Version 2.
@@ -64,7 +64,7 @@ The initials \bold{PBS} refer to the \href{http://www.pac.dfo-mpo.gc.ca/science/
 
 \section{Where is the User's Guide?}
 
-The R library directory \code{./library/PBSddesolve/doc} includes a complete User's Guide \code{PBSddesolve-UG.pdf}. 
+The R library directory \code{./library/PBSddesolve/doc} includes a complete User's Guide\\ \code{PBSddesolve-UG.pdf}. 
 To use this package effectively, please consult the Guide.
 Simon's user guide for \code{solve95} can also be found in this directory.
 

@@ -24,7 +24,7 @@
 
 /*-----------------------------------------------------------------------------
   startDDE:
-    Simon Wood’s (1999) numerical routines produce the core functionality of
+    Simon Wood's (1999) numerical routines produce the core functionality of
     PBSddesolve.
 
   Arguments:

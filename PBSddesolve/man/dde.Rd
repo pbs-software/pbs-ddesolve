@@ -5,7 +5,7 @@
 \description{
   A solver for systems of delay differential equations based on
   numerical routines from 
-  \href{https://people.maths.bris.ac.uk/~sw15190/}{Simon Wood}'s
+  \href{https://www.maths.ed.ac.uk/~swood34/simon/dde.html}{Simon Wood}'s
   \emph{solv95} program.
   This solver is also capable of solving systems of ordinary
   differential equations. 
@@ -90,8 +90,8 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
 
   Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
   Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
-  \emph{locus opus}: Institute of Ocean Sciences (IOS), Sidney BC\cr
-  Last modified \code{Rd: 2019-03-07}
+  \emph{locus opus}: Regional Headquarters (RHQ), Vancouver BC\cr
+  Last modified \code{Rd: 2022-10-25}
 }
 \seealso{
   \code{\link[PBSddesolve]{pastvalue}}

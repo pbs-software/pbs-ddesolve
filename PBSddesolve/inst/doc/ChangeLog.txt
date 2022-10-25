@@ -7,6 +7,16 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.12.7 (2022-10-25) [Rcheck=F, Rbuild=F]
+  * C code
+    + Kurt Hornik noted problems with the linux builds:
+      - Found the following significant warnings:
+      - ./PBSddesolve.h:27:15: warning: invalid UTF-8 in comment [-Winvalid-utf8]
+      - PBSddesolve.c:149:20: warning: a function declaration without a prototype is deprecated in all versions of C [-Wstrict-prototypes]
+      - ddeq.c:94:6: warning: a function definition without a prototype is deprecated in all versions of C and is not supported in C2x [-Wdeprecated-non-prototype]
+      - etc.
+      - RH fixed the UTF-8 warning; NB to address the C problems in v.1.12.8.
+
 1.12.6 (2019-12-09) [Rcheck=T, Rbuild=T]
   * C code
     + Kurt Hornik noted: PBSddesolve_1.12.5.tar.gz still seems to fail to install with gcc10.

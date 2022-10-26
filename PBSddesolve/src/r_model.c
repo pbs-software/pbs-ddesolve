@@ -14,9 +14,7 @@
 /*             Problem specific routines                                   */
 /***************************************************************************/
 
-void switchfunctions(sw,s,c,t)
-double *sw,*s,*c,t;
-
+void switchfunctions(double *sw, double *s, double *c, double t)
 /* This routine sets the values of the switch functions. When the switch
 	functions pass through zero from positive to negative the state variables
 	may be reset in function map(). The switch functions should pass smoothly
@@ -54,9 +52,7 @@ double *sw,*s,*c,t;
 	UNPROTECT(4);
 }
 
-void map(s,c,t,swno)
-double *s,*c,t;int swno;
-
+void map(double *s, double *c, double t, int swno)
 /* This routine is called whenever one of the switch functions passes through
 	zero. 'swno' is the number of the switch function. The state variables
 	can be changed discontinuously within this routine. eg:
@@ -95,9 +91,7 @@ double *s,*c,t;int swno;
 	UNPROTECT(5);
 }
 
-void grad(g,s,c,t)
-double *g,*s,*c,t;
-
+void grad(double *g, double *s, double *c, double t)
 /* This routine must provide the gradients g for the state variables s.
 	So ds[i]/dt=g[i]=fi(s,c,t) where c is the coefficient vector. lagged
    variables may be accessed here using pastvalue(i,x,j) which returns the
@@ -161,9 +155,7 @@ double *g,*s,*c,t;
 	UNPROTECT(6);
 }
 
-void storehistory(his,ghis,g,s,c,t)
-double *his,*ghis,*g,*s,*c,t;
-
+void storehistory(double *his, double *ghis, double *g, double *s, double *c, double t)
 /* This is the routine in which the values of the history variables at time
 	t are calculated and put in the array his, along with gradients in ghis,
 	using state variables s, gradients of s, g, and coefficients c

@@ -91,10 +91,9 @@ histype history;
 /***************************************************************************/
 
 
-void rk23(state,newstate,g,newg,errors,coeff,ns,time,dt,clear)
-	double *state,*newstate,*g,*newg,*errors,*coeff,time,dt;int ns;
-	int clear; /* Bobby */
-
+void rk23(double *state, double *newstate, double *g, double *newg,
+	  double *errors, double *coeff, int ns, double time, double dt,
+	  int clear)
 	/* Takes a single integration step from time to time+dt using a 3rd order
 	   embedded Runge-Kutta Fehlberg method:
 	   E.Hairer, S.P.Norsett & G.Wanner 1987, Solving Ordinary differential
@@ -154,10 +153,7 @@ be the same pointer/array */
 }
 
 
-void inithisbuff(nhv,histsize,nlag,clear)
-	int nhv,nlag;long histsize;
-	int clear; /* Bobby */
-
+void inithisbuff(int nhv, long histsize, int nlag, int clear)
 	/* sets up the global structure "history" and
 	   sets the global long integer history.offset to zero
 	   4/10/95, if it's been called before it clears up the old version first 23/11/95*/
@@ -214,10 +210,7 @@ void inithisbuff(nhv,histsize,nlag,clear)
 	history.offset= -1L;
 }
 
-void updatehistory(g,s,c,t,clear)
-	double *g,*s,*c,t;
-	int clear;
-
+void updatehistory(double *g, double *s, double *c, double t, int clear)
 	/* updates the history record by calling the storehistory() moving the
 	   offset and updating and recording the time 4/10/95*/
 
@@ -250,8 +243,7 @@ void updatehistory(g,s,c,t,clear)
 	}
 }
 
-double pastgradient(i,t,markno)
-	int i,markno;double t;
+double pastgradient(int i, double t, int markno)
 	/* Interogates the history ringbuffers. Note that there is a fair amount of
 	   assignment of one variable to another at the start: this is to save
 	   on address calculation and speed up the routine. 4/10/95 (copy from
@@ -290,8 +282,7 @@ double pastgradient(i,t,markno)
 }
 
 
-double pastvalue(i,t,markno)
-	int i,markno;double t;
+double pastvalue(int i, double t, int markno)
 	/* Interogates the history ringbuffers. Note that there is a fair amount of
 	   assignment of one variable to another at the start: this is to save
 	   on address calculation and speed up the routine. 4/10/95*/
@@ -332,8 +323,7 @@ double pastvalue(i,t,markno)
 }
 
 
-double zeropos(x1,x2,x3,s1,s2,s3)
-	double x1,x2,x3,s1,s2,s3;
+double zeropos(double x1, double x2, double x3, double s1, double s2, double s3)
 	/* finds the root in [x1,x3] of a quadratic passing through the (xi,si)s
 	   it is assumed that s3<s1*/
 
@@ -372,10 +362,9 @@ double zeropos(x1,x2,x3,s1,s2,s3)
 }
 
 
-double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch,clear)
-	double *sw0,*newsws,*s0,*news,*g,*newg,*c,*err,t0,t1;
-	int nsw,ns,*flickedswitch,clear;
-
+double istep(double *sw0, double *newsws, double *s0, double *news, double *g,
+	     double *newg, double *c, double *err, double t0, double t1,
+	     int nsw, int ns, int *flickedswitch, int clear)
 	/* executes RK23 step to next switch or target depending on which comes first
 	   If step is to the first switch then the number of that switch is returned
 	   in flickedswitch, but map() is not called.
@@ -487,34 +476,32 @@ double istep(sw0,newsws,s0,news,g,newg,c,err,t0,t1,nsw,ns,flickedswitch,clear)
 
 }
 
-
-
-
-void dde(s,c,t0,t1,dt,eps,otimes,no_otimes, ns,nsw,nhv,hbsize,nlag,reset,fixstep,
-	 clear /* Bobby */)  /* bjc 2007-05-08: added otimes*/
-	double *s,      /* State variables */
-	*c,      /* coefficients */
-	t0,t1,   /* start and stop times */
-	*dt,     /* pointer to initial timestep (returns final step - which
-		    is step that would have been used if t1 not reached!)
-		    max step set to 100 times this, minimum set to 1e-9 of this*/
-	eps;     /* fractional tolerance for adaptive stepping */
-	/*       dout;    interval for output via user routine output(). Every
-		 time a step passes 1 or more times of the form t0+i*dout
-		 output() is called once. Hence output is only roughly
-		 regular. dout=0.0 for no output. */
-	double *otimes;  /* bjc 2007-05-08: an ordered array of times >= t0 at which 
-			    the state variables should be recorded for output */
-	int no_otimes;  /* bjc 2007-05-08: length of otimes */
-	long hbsize;    /* The number of elements to store in the history buffer */
-	int nsw,        /* numbwer of switches */
-	ns,         /* number of state variables */
-	nhv,        /* number of lagged variables */
-	reset,      /* set to 0 not to reset, to 1 to reset */
-	nlag,       /* number of place markers per history variable */
-	fixstep;    /* set to 0 for adaptive stepping, or 1 for fixed timestep */
-	int clear;  /* Bobby */
-
+/* void dde(...)
+     s          State variables
+     c          Coefficients
+     t0, t1     Start and stop times
+     dt         Pointer to initial timestep (returns final step - which
+                is step that would have been used if t1 not reached!)
+                max step set to 100 times this, minimum set to 1e-9 of this
+     eps        Fractional tolerance for adaptive stepping
+     dout       Interval for output via user routine output(). Every
+                time a step passes 1 or more times of the form t0+i*dout
+                output() is called once. Hence output is only roughly
+                regular. dout=0.0 for no output.
+     otimes     An ordered array of times >= t0 at which
+                the state variables should be recorded for output
+     no_otimes  Length of otimes
+     hbsize     The number of elements to store in the history buffer
+     nsw        Numbwer of switches
+     ns         Number of state variables
+     nhv        Number of lagged variables
+     reset      Set to 0 not to reset, to 1 to reset
+     nlag       Number of place markers per history variable
+     fixstep    Set to 0 for adaptive stepping, or 1 for fixed timestep
+*/
+void dde(double *s, double *c, double t0, double t1, double *dt, double eps,
+	 double *otimes, int no_otimes, int ns, int nsw, int nhv, long hbsize,
+	 int nlag, int reset, int fixstep, int clear)
 {
   double D,Da,errmax,rerr,target,t=0;
   static double *err,*newsws,*sws,*news,*newg,*dum,*sp,*nswp,*swp,*nsp,*e0,*scale;

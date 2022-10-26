@@ -29,8 +29,10 @@ dde <- function( y, times, func, parms=NULL, switchfunc=NULL,
 
 	# If .Call("startDDE", ...) fails, return a dummy matrix w/ 2 columns
 	tout <- try(data.frame(out));
-	if (class(tout)=="try-error") 
-		tout <- matrix(data=c(times, NA*times), nrow=ltimes, ncol=2) 
+	#if (class(tout)=="try-error") 
+	if (inherits(tout, "try-error")) {
+		tout <- matrix(data=c(times, NA*times), nrow=ltimes, ncol=2)
+	}
 	#tout <- as.matrix(out);
 	attr(tout, "istate") <- 2; # rh: what's this?
 	return(tout) 

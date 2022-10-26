@@ -7,6 +7,16 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.13.0 (2022-10-26) [Rcheck=T, Rbuild=T]
+  * C code
+    + Converted 'deq.c' and `r_model.c' to UNIX format (LF instead of CR)
+
+1.12.8 (2022-10-26) [Rcheck=F, Rbuild=F]
+* Update K&R style function definitions (NB)
+    + With Clang 15, we were seeing the following warning:
+      - a function definition without a prototype is deprecated in all versions of C and is not supported in C2x [-Wdeprecated-non-prototype]
+    + This commit fixes the problem and eliminates the warning.
+
 1.12.7 (2022-10-25) [Rcheck=F, Rbuild=F]
   * C code
     + Kurt Hornik noted problems with the linux builds:

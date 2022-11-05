@@ -146,7 +146,7 @@ void setupglobaldata(int no_vars, int no_otherVars, int no_switch, double *setti
 }
 
 /*===========================================================================*/
-void freeglobaldata()
+void freeglobaldata(void)
 {
 	int i;
 	if (global_data.vals) {

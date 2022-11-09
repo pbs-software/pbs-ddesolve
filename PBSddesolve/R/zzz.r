@@ -25,15 +25,21 @@ PBSddesolve ", pkg_info$Version, " -- Copyright (C) 2007-",year," Fisheries and 
 A complete user guide 'PBSddesolve-UG.pdf' is located at 
 ", userguide_path, "
 
-GUI demos require package 'PBSmodelling' and include:
-blowflies, cooling, icecream, and lorenz
-When calling 'demo', set argument 'ask=FALSE'.
+Demos include 'blowflies', 'cooling', 'icecream', and 'lorenz'
+They can be run two ways:
+
+1. Using 'utils' package 'demo' function, run command
+> demo(icecream, package='PBSddesolve', ask=FALSE)
+
+2. Using package 'PBSmodelling', run commands
+> require(PBSmodelling); runDemos()
+and choose PBSddesolve and then one of the four demos.
 
 Packaged on ", pkg_date, "
 Pacific Biological Station, Nanaimo
 
 All available PBS packages can be found at
-https://github.com/pbs-software/pbs-ddesolve
+https://github.com/pbs-software
 -----------------------------------------------------------
 
 ")

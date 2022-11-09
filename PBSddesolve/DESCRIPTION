@@ -1,6 +1,6 @@
 Package:    PBSddesolve
-Version:    1.13.0
-Date:       2022-10-26
+Version:    1.13.1
+Date:       2022-11-09
 Title:      Solver for Delay Differential Equations
 Authors@R: c(
    person("Alex", "Couture-Beil", role = "aut", email = "alex@mofo.ca"),

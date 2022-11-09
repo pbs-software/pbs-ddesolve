@@ -7,12 +7,24 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.13.1 (2022-11-09) [Rcheck=T, Rbuild=T]
+  * C code
+    + NB added 'void' argument to `void freeglobaldata(void)' in 'PBSddesolve.c' to address:
+      - PBSddesolve.c:149:20: warning: a function declaration without a prototype is deprecated in all versions of C [-Wstrict-prototypes]
+    + RH converted 'PBSddesolve.c' to UNIX format (LF instead of CR)
+  * R code
+    + Started using `devtools' and `rhub' to check package on other systems. (RH 221107)
+    + Added `upquote.sty' file to vignettes as Fedora linux seems incapable of finding it. (RH 221108)
+    + Changed package startup message to clarify how to run examples. (RH 221108)
+
 1.13.0 (2022-10-26) [Rcheck=T, Rbuild=T]
   * C code
-    + Converted 'deq.c' and `r_model.c' to UNIX format (LF instead of CR)
+    + RH converted 'deq.c' and `r_model.c' to UNIX format (LF instead of CR)
+  * R code
+    + RH changed `if (class(tout)=="try-error")' to `if (inherits(tout, "try-error"))' in `dde.r'
 
 1.12.8 (2022-10-26) [Rcheck=F, Rbuild=F]
-* Update K&R style function definitions (NB)
+  * NB updated K&R style function definitions
     + With Clang 15, we were seeing the following warning:
       - a function definition without a prototype is deprecated in all versions of C and is not supported in C2x [-Wdeprecated-non-prototype]
     + This commit fixes the problem and eliminates the warning.

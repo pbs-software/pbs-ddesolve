@@ -382,8 +382,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	SET_STRING_ELT(names, 0, mkChar("time"));
 	for(i=0;i<no_var;i++) {
 		if (isNull(yinit_names)) {
-			/* yuck - possible buffer overflow */
-			sprintf(ch_buf, "y%i", i+1);
+			snprintf(ch_buf, sizeof(ch_buf), "y%i", i+1);
 			SET_STRING_ELT(names, i+1, mkChar(ch_buf));
 		} else {
 			SET_STRING_ELT(names, i+1, STRING_ELT(yinit_names, i));
@@ -391,8 +390,7 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	}
 	for(i=0;i<no_otherVar;i++) {
 		if (isNull(extra_names)) {
-			/* yuck - possible buffer overflow */
-			sprintf(ch_buf, "extra%i", i+1);
+			snprintf(ch_buf, sizeof(ch_buf), "extra%i", i+1);
 			SET_STRING_ELT(names, i+no_var+1, mkChar(ch_buf));
 		} else {
 			SET_STRING_ELT(names, i+no_var+1, STRING_ELT(extra_names, i));

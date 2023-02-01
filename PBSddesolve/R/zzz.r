@@ -20,7 +20,7 @@
 	packageStartupMessage("
 -----------------------------------------------------------
 PBSddesolve ", pkg_info$Version, " -- Copyright (C) 2007-",year," Fisheries and Oceans Canada
-(based  on solv95 by Simon Wood)
+(based on solv95 by Simon Wood)
 
 A complete user guide 'PBSddesolve-UG.pdf' is located at 
 ", userguide_path, "

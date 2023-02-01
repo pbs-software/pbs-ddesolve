@@ -7,6 +7,18 @@ Package authors:
   NB  = Nicholas Boers
 -------------------------
 
+1.13.3 (2023-02-01) [Rcheck=T, Rbuild=T]
+  * C code
+    + RH converted 'PBSddesolve.c' to UNIX format (LF instead of CR)
+  * Documentation
+    + Updated the vignette `PBSddesolveIntro'. (RH 230201)
+    + Updated Rd help files. (RH 230130)
+
+1.13.2 (2023-01-22) [Rcheck=F, Rbuild=F]
+  * Code
+    + Replace calls to sprintf with snprintf. (NB 230122)
+      - Fixes issues flagged by Prof. Ripley 2023-01-14.
+
 1.13.1 (2022-11-09) [Rcheck=T, Rbuild=T]
   * C code
     + NB added 'void' argument to `void freeglobaldata(void)' in 'PBSddesolve.c' to address:

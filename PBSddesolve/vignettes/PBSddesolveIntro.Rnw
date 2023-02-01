@@ -1,4 +1,4 @@
-\documentclass[letter,11pt]{article}
+\documentclass[letterpaper,11pt]{article}
 %\VignetteIndexEntry{Introduction to PBSddesolve}
 %\VignettePackage{PBSddesolve}
 \usepackage{Sweave}
@@ -10,23 +10,16 @@
 \definecolor{blue}{rgb}{0, 0, 1}
 
 % Definitions
-\newcommand{\slan}{\texttt{S}}
-\newcommand{\rlan}{\texttt{R}}
 \newcommand{\pbsd}{\texttt{PBSddesolve}}
 \newcommand{\pbsm}{\texttt{PBSmodelling}}
-\newcommand{\tcl}{\texttt{Tcl/Tk}}
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\ital}[1]{\textit{#1}}
 \newcommand{\bold}[1]{\textbf{#1}}
-\newcommand{\under}[1]{{\underline {#1}}}
-\newcommand{\red}[1]{{\textcolor{red} {#1}}}
-
-%\usepackage{verbatim}
-\usepackage{hyperref}
+%\newcommand{\ital}[1]{\textit{#1}}
+%\newcommand{\under}[1]{{\underline {#1}}}
+%\newcommand{\red}[1]{{\textcolor{red} {#1}}}
 
 % Keep on one page
 \usepackage[letterpaper, top=0.5in, bottom=0.5in, left=1in, right=1in, footskip=0in, headheight=0.5in]{geometry}
-%\textheight 9.0in \topmargin -1.0in
 
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, plainpages=true, linkcolor=black, citecolor=black, urlcolor=blue}
@@ -35,13 +28,17 @@
 \renewcommand{\sfdefault}{phv}% Helvetica
 %\renewcommand{\ttdefault}{pcr}% Courier
 \usepackage[scaled=1.05]{inconsolata}
-\renewcommand{\ttdefault}{zi4}% Courier
+\renewcommand{\ttdefault}{zi4}% Inconsolata
+
+\usepackage{titlesec}
+\titlespacing*{\section}
+{0pt}{1\baselineskip}{0.5\baselineskip}
 
 \begin{document}
 
 \title{Introduction to PBSddesolve}
 \author{Jon T. Schnute, Alex Couture-Beil, and Rowan Haigh}
-\date{November 8, 2022}
+\date{February 1, 2023}
 \maketitle
 
 \section{What is PBSddesolve?}
@@ -64,14 +61,20 @@ Simon's user guide for \code{solve95} can also be found in this directory.
 
 \section{What demos are available?}
 
-\pbsd{} includes four examples that are fully documented in the User's Guide. To view them, run the \pbsm{} function \code{runDemos()}.
-This produces a GUI that shows all demos available from locally installed packages.
+\pbsd{} includes four examples (\code{`blowflies'}, \code{`cooling'}, \code{`icecream'}, \code{`lorenz'}) that are fully documented in the User's Guide.
+\vspace*{1ex} They can be run two ways:\\
+\noindent 1. Using the `utils' package `demo' function, run the command:\\
+\vspace*{1ex} \code{demo(icecream, package=`PBSddesolve', ask=FALSE)}\\
+\noindent 2. Using the package `PBSmodelling', run the commands:\\
+\vspace*{1ex} \code{require(PBSmodelling); runDemos()}\\
+The latter produces a GUI that shows all demos available from locally installed packages.
 Choose \pbsd{}. 
 Note that the examples are run in the temporary working environment \code{.PBSddeEnv}.
 
-\vspace*{4ex} \noindent {\bf \Large References}
+\section{References}
+%\vspace*{3ex} \noindent {\bf \Large References}
 
-\vspace*{2ex} \noindent Schnute, J.T., Couture-Beil, A., and Haigh, R. (2008) A user's guide to the R package\\ \pbsd{}, version 1.05. 17 pp.\\\\
-Wood, S.N. (1999) \code{Solv95}: a numerical solver for systems of delay differential equations with switches. Saint Andrews, UK. 10 pp.
+Schnute, J.T., Couture-Beil, A., and Haigh, R. (2016) A user's guide to the R package\\ \pbsd{}, version 1.12.1, April 18, 2016. 17\,p.\\\\[-0.75ex]
+Wood, S.N. (1999) \code{Solv95}: a numerical solver for systems of delay differential equations with switches. Saint Andrews, UK. 10\,p.
 
 \end{document}

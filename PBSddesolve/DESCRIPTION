@@ -1,6 +1,6 @@
 Package:    PBSddesolve
-Version:    1.13.3
-Date:       2023-02-01
+Version:    1.13.4
+Date:       2024-01-04
 Title:      Solver for Delay Differential Equations
 Authors@R: c(
    person("Alex", "Couture-Beil", role = "aut", email = "alex@mofo.ca"),
@@ -8,11 +8,12 @@ Authors@R: c(
    person("Rowan", "Haigh", role = c("aut", "cre"), email = "rowan.haigh@dfo-mpo.gc.ca"),
    person(c("Simon", "N."), "Wood", role = "aut", email = "s.wood@bath.ac.uk"),
    person(c("Benjamin", "J."), "Cairns", role = "aut"),
-   person("Nicholas", "Boers", role = "ctb", email = "nboers@gmail.com"))
+   person("Nicholas", "Boers", role = "ctb", email = "nboers@gmail.com"),
+   person("Nick", "Fisch", role = "ctb", email = "nick.fisch@dfo-mpo.gc.ca"))
 Author: Alex Couture-Beil [aut], Jon T. Schnute [aut], Rowan Haigh [aut, cre],
-   Simon N. Wood [aut], Benjamin J. Cairns [aut], Nicholas Boers [ctb]
+   Simon N. Wood [aut], Benjamin J. Cairns [aut], Nicholas Boers [ctb], Nick Fisch [ctb]
 Maintainer: Rowan Haigh <rowan.haigh@dfo-mpo.gc.ca>
-Copyright:  2007-2023, Fisheries and Oceans Canada
+Copyright:  2007-2024, Fisheries and Oceans Canada
 Depends:    R (>= 3.5.0)
 Suggests:   PBSmodelling
 NeedsCompilation: yes

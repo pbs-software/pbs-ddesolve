@@ -218,7 +218,7 @@ int testFunc(int no_var, double *test_vars, double t, SEXP *names, PROTECT_INDEX
 	p1 = VECTOR_ELT(result, 0);
 
 	if (LENGTH(result)!=2 && LENGTH(result)!=1)
-		error("func return error: returned list should have length one or two\n", TYPEOF(p1));
+		error("func return error: returned list should have length one or two\n"); /*, TYPEOF(p1)); NF (240103) suggested removing this*/
 	if (!isReal(p1))
 		error("func return error: first element of list should be numeric. (got type \"%i\")\n", TYPEOF(p1));
 	if (LENGTH(p1)!=no_var)

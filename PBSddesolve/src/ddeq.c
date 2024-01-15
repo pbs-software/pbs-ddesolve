@@ -304,7 +304,7 @@ double pastvalue(int i, double t, int markno)
 	k1=k+1L;if (k1==size) k1=0L;
 	if (t<x[k])
 	{
-		Rprintf("\nERROR: lag for variable %d too large at %g\nx[k]=%g   k=%d   t=%g\n",i,
+		Rprintf("\nERROR: lag for variable %d too large at %g\nx[k]=%g   k=%ld   t=%g\n",i,
 				history.last_time-t,x[k],k,t);
 		error("Lag too large for history buffer - try increasing the value of 'hbsize'");
 	}

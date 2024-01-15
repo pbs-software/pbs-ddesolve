@@ -86,8 +86,8 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
 
   Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
   Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
-  \emph{locus opus}: Regional Headquarters (RHQ), Vancouver BC\cr
-  Last modified \code{Rd: 2023-01-30}
+  \emph{locus opus}: Offsite, Vancouver BC\cr
+  Last modified \code{Rd: 2024-01-04}
 }
 \seealso{
   \code{\link[PBSddesolve]{pastvalue}}

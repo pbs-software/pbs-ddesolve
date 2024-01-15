@@ -5,7 +5,16 @@ Package authors:
   JTS = Jon T. Schnute
   RH  = Rowan Haigh
   NB  = Nicholas Boers
+  NF  = Nick Fisch
 -------------------------
+
+1.13.4 (2024-01-04) [Rcheck=T, Rbuild=T]
+  * C code
+    + Changed calls in 'PBSddesolve.c' from R's function 'TYPEOF' to C's function 'decltype' !DID NOT WORK! Revert to TYPEOF. (RH 240104)
+    + Removed call 'TYPEOF(p1)' on line 221. (NF 240104)
+    + Changed line 307 in 'ddeq.c' for k from 'k=%d' to 'k=%ld'. (NF 240104)
+  * Documentation
+    + Added Rd documentation files for functions `.PBSddeEnv' and `.onClosePBSddeExamples'. (RH 240104)
 
 1.13.3 (2023-02-01) [Rcheck=T, Rbuild=T]
   * C code
@@ -17,7 +26,7 @@ Package authors:
 1.13.2 (2023-01-22) [Rcheck=F, Rbuild=F]
   * Code
     + Replace calls to sprintf with snprintf. (NB 230122)
-      - Fixes issues flagged by Prof. Ripley 2023-01-14.
+      - Fixes issues flagged by Prof Ripley 2023-01-14.
 
 1.13.1 (2022-11-09) [Rcheck=T, Rbuild=T]
   * C code

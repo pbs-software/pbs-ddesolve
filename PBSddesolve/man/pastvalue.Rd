@@ -16,21 +16,23 @@ pastvalue(t)
 pastgradient(t)
 }
 \arguments{
-  \item{t}{Access history at time \code{t}.}
+  \item{t}{\code{numeric} -- time \emph{t} at which history is accessed}
 }
 \value{
-  Vector of variable history at time \code{t}.
+  Vector of variable history at time \emph{t}.
 }
 \author{
-  \href{mailto:alex@mofo.ca}{Alex Couture-Beil} -- Software Engineer, Earthly Technologies, Victoria BC\cr
+  \href{mailto:alex@mofo.ca}{Alex Couture-Beil} -- Software Engineer, Earthly Technologies, Victoria BC
 
   Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
   Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
-  \emph{locus opus}: Regional Headquarters (RHQ), Vancouver BC\cr
-  Last modified \code{Rd: 2023-01-30}
+  \emph{locus opus}: remote office, Vancouver BC\cr
+  Last modified \code{Rd: 2025-06-13}
 }
 \seealso{
+In package \pkg{PBSddesolve}:\cr
   \code{\link[PBSddesolve]{dde}}
 }
 \keyword{math}
+
 

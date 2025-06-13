@@ -1,12 +1,25 @@
 PBSddesolve Changes
-=========================
+===================================
 Package authors:
   ACB = Alex Couture-Beil
   JTS = Jon T. Schnute
   RH  = Rowan Haigh
   NB  = Nicholas Boers
   NF  = Nick Fisch
--------------------------
+-----------------------------------
+CRAN package version numbers follow a "major.minor.patch" format (e.g., 1.2.3), where: 
+	Major: Indicates a significant change that might break existing code.
+	Minor: Indicates the addition of new features or improvements, while generally maintaining backward compatibility.
+	Patch: Indicates bug fixes and minor improvements that do not introduce new features.
+-----------------------------------
+
+1.13.5 (2025-06-13) [Rcheck=T, Rbuild=T]
+  * Documentation
+    - Update all Rd files and README.md file (RH 250613)
+  * C code
+    + Replaced `FORMALS' with `R_ClosureFormals' in `PBSddesolve.c' (RH 250613)
+      - R.4.5.0 is complaining about non-API entry points: FORMALS
+
 
 1.13.4 (2024-01-04) [Rcheck=T, Rbuild=T]
   * C code

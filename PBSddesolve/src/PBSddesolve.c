@@ -344,8 +344,9 @@ SEXP startDDE(SEXP gradFunc, SEXP switchFunc, SEXP mapFunc, SEXP env, SEXP yinit
 	r_stuff.yinit = yinit;
 	r_stuff.outtimes = outtimes; /* bjc 2007-05-08: add times to R data*/
 	
-	/* check if supplied function is func(y,t) or func(y,t,parms) */
-	list = PROTECT(FORMALS(gradFunc)); /* protect 1 */
+	/* check if supplied function is func(y,t) or func(y,t,parms)
+	R.4.5.0 is complaining about non-API entry points: replace FORMALS with R_ClosureFormals (RH 250613) */
+	list = PROTECT(R_ClosureFormals(gradFunc)); /* protect 1 */
 	i=0;
 	while (list != R_NilValue) {
 		i++;

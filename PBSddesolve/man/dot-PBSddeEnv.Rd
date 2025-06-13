@@ -1,9 +1,11 @@
 \name{dot-PBSddeEnv}
 \docType{data}
 \alias{.PBSddeEnv}
-\title{PBSddesolve Environment}
+\title{
+  PBSddesolve Environment
+}
 \description{
-  An environment set aside for PBSddesolve.
+  An environment set aside for \code{PBSddesolve}.
 }
 \usage{.PBSddeEnv}
 \format{
@@ -19,8 +21,8 @@ A new environment with a \code{.GlobalEnv} parent.
 }
 \seealso{
 In \pkg{PBSmodelling}:\cr
-  \code{lisp},
-  \code{tget}
+  \code{\link[PBSmodelling]{lisp}},
+  \code{\link[PBSmodelling]{tget}}
 }
 \keyword{environment}
 

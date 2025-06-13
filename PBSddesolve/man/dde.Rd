@@ -1,11 +1,12 @@
 \name{dde}
 \alias{dde}
-\title{Solve Delay Differential Equations}
-
+\title{
+  Solve Delay Differential Equations
+}
 \description{
   A solver for systems of delay differential equations based on numerical routines from
   C source code \code{solv95} by 
-  \href{https://www.maths.ed.ac.uk/~swood34/simon/dde.html}{Simon Wood}.
+  \href{https://webhomes.maths.ed.ac.uk/~swood34/simon/dde.html}{Simon Wood}.
   This solver is also capable of solving systems of ordinary differential equations. 
 }
 \usage{
@@ -13,9 +14,9 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
    tol=1e-08, dt=0.1, hbsize=10000) 
 }
 \arguments{
-  \item{y}{\code{numeric} -- vector of initial values of the DDE system.
-    The size of the supplied vector determines the number of variables in the system.}
-  \item{times}{\code{numeric} -- vector of specific times to solve. }
+  \item{y}{\code{numeric} -- vector of initial values of the DDE system;
+    the size of the supplied vector determines the number of variables in the system}
+  \item{times}{\code{numeric} -- vector of specific times to solve}
   \item{func}{\code{function} -- a user-supplied function that computes the gradients in 
     the DDE system at time \code{t}.
     The function must be defined using the arguments: \code{(t,y)} or \code{(t,y,parms)},
@@ -28,7 +29,7 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
     a vector (possibly named) of values for a variable specified by the user at each 
     point in the integration.}
   \item{parms}{\code{list} -- any constant parameters to pass to \code{func},
-    \code{switchfunc}, and \code{mapfunc}.}
+    \code{switchfunc}, and \code{mapfunc}}
   \item{switchfunc}{\code{function} -- an optional function that is used to manipulate
     state values at given times. 
     The switch function takes the arguments \code{(t,y)} or \code{(t,y,parms)} and must 
@@ -42,9 +43,9 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
     state values, \code{switch_id} is the index of the triggered switch, and \code{parms}
     are additional constant parameters.}
   \item{tol}{\code{numeric} -- maximum error tolerated at each time step (as a proportion
-    of the state variable concerned).}
-  \item{dt}{\code{numeric} -- maximum initial time step.}
-  \item{hbsize}{\code{numeric} -- history buffer size required for solving DDEs.}
+    of the state variable concerned)}
+  \item{dt}{\code{numeric} -- maximum initial time step}
+  \item{hbsize}{\code{numeric} -- history buffer size required for solving DDEs}
 }
 \details{
   Please see the included demos (\code{'blowflies'}, \code{'cooling'}, \code{'icecream'},
@@ -82,14 +83,15 @@ dde(y, times, func, parms=NULL, switchfunc=NULL, mapfunc=NULL,
   If the vector was not named, then \code{extra1}, \code{extra2}, \dots{} will be used.
 }
 \author{
-  \href{mailto:alex@mofo.ca}{Alex Couture-Beil} -- Software Engineer, Earthly Technologies, Victoria BC\cr
+  \href{mailto:alex@mofo.ca}{Alex Couture-Beil} -- Software Engineer, Earthly Technologies, Victoria BC
 
   Maintainer: \href{mailto:rowan.haigh@dfo-mpo.gc.ca}{Rowan Haigh}, Program Head -- Offshore Rockfish\cr
   Pacific Biological Station (PBS), Fisheries & Oceans Canada (DFO), Nanaimo BC\cr
-  \emph{locus opus}: Offsite, Vancouver BC\cr
-  Last modified \code{Rd: 2024-01-04}
+  \emph{locus opus}: remote office, Vancouver BC\cr
+  Last modified \code{Rd: 2025-06-13}
 }
 \seealso{
+In package \pkg{PBSddesolve}:\cr
   \code{\link[PBSddesolve]{pastvalue}}
 }
 \examples{
